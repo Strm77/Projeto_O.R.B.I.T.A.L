@@ -153,6 +153,44 @@ Regras:
 
 ---
 
+## Entrega 5 — Perguntas e Respostas (quando o tipo tiver banco de perguntas)
+
+Formato de leitura rápida, usado quando há um guia do tipo em `references/tipos/`
+(ex.: as 30 perguntas de `licenciamento-software.md`). Pode substituir a Ficha-Resumo
+se o usuário pedir "as perguntas" ou quando a sessão já passou.
+
+```markdown
+Abreviações: Edital = edital.pdf (35 p.) · TR = tr.pdf (36 p.) · ETP = etp.pdf (17 p.) ·
+Minuta = Edital, Anexo II (p. 22–30). Página do PDF = página impressa: sim/não.
+
+⚠️ <aviso de fase, se houver: "A sessão foi em dd/mm (dia) e já passou; o prazo de
+impugnação venceu em dd/mm (calculado). Este material serve para ...">
+
+## Identificação e regras da disputa
+
+1. <Pergunta>
+<Resposta direta em 1–3 linhas, ou lista curta.>
+📍 [Edital, 1.1–1.2, p. 4] · [TR, 1.1, p. 1]
+
+Interpretação (não consta do edital): <se houver>
+```
+
+Regras:
+- **Resposta antes da fonte.** Cada pergunta termina com a linha `📍` com todas as
+  fontes; em listas, a fonte pode ir no fim de cada linha.
+- **Legenda obrigatória** no topo, ligando cada abreviação a um arquivo (e anexo, se for
+  o caso), com nº de páginas e se a página do PDF bate com a impressa. Sem a legenda o
+  verificador não consegue conferir as citações curtas.
+- Cálculos do analista em primeira pessoa e marcados: "pelo meu cálculo, 25/09/2026:
+  contei 29/09, 28/09 e 25/09".
+- Seções na ordem do banco de perguntas do tipo; feche com **Contradições** (tabela
+  com Impacto 🔴/🟡/🟢), **Lacunas** e o que levar à reunião inicial / próximo marco.
+- Uma interpretação nunca pode contradizer um fato de outra resposta (ex.: dizer
+  "pagamento adiantado" quando outra resposta diz "após a entrega"). Releia as
+  interpretações contra as respostas antes de entregar.
+
+---
+
 ## Após as quatro entregas
 
 ```markdown

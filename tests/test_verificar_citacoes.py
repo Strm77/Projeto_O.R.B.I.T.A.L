@@ -43,8 +43,8 @@ def test_citacoes_corretas(docs, texto):
     (f"`[{ED}, Anexo II — Requisitos, item 6.2, p. 7]`", "não encontrado em Anexo II"),
     (f"`[{ED}, item 18.1, p. 5]`", "item 18.1 não encontrado"),
     (f'"até 45 (quarenta e cinco) dias corridos" `[{ED}, item 7.3, p. 3]`', "não encontrada no documento"),
-    ('"30 (trinta) dias" `[Edital, item 7.3, p. 9]`', "formato não verificável"),
-    ('"20/10/2026, às 10h00" `[errata_01_digitalizada.pdf, item 2, p. 1]`', "fora do item 2"),
+    ('"30 (trinta) dias" `[Edital, item 7.3, p. 9]`', "nem apelido declarado"),
+    ('"20/10/2026, às 10h00" `[errata_01_digitalizada.pdf, item 2, p. 1]`', "fora do(s) item(ns) 2"),
     (f"`[{ED}, item 7.3, p. 99]`", "página fora do documento"),
     ("`[outro.pdf, item 1, p. 1]`", "não está entre os PDFs"),
 ])
@@ -91,3 +91,48 @@ def test_analise_de_referencia_sem_erros(docs):
     # contradição proposital apontada com as duas fontes
     assert any("item 7.3, p. 3" in l and "Termo de Referência, item 6.2, p. 7" in l
                for l in texto.splitlines() if l.startswith("| 1 | Prazo de implantação"))
+
+
+# --- Forma curta com apelidos (formato do gabarito em perguntas e respostas) --------
+
+APELIDOS = vc.ler_apelidos([f"Edital={ED}", f"TR={ED}:Anexo I", f"Req={ED}:Anexo II",
+                            f"Minuta={ED}:Anexo IV"])
+
+
+def nivel_curto(docs, texto):
+    (r,) = vc.verificar(texto, docs, APELIDOS)
+    return r["nivel"], " ".join(r["msg"])
+
+
+@pytest.mark.parametrize("texto", [
+    "📍 [TR, 6.1–6.3, p. 7]",                      # intervalo de itens
+    "📍 [Edital, 7.2, 7.3, p. 3]",                  # vários itens
+    "📍 [TR, 4.1 e 4.3, p. 6]",                     # "e"
+    "📍 [Minuta, cl. 7.1, p. 13]",                  # cláusula abreviada
+    "📍 [Edital, preâmbulo, p. 1]",                 # só página
+    "📍 [TR, 7.1, item 2, p. 7]",                   # linha de tabela do item 7.1
+    "📍 [Req, seções 2–3, p. 10]",                  # seções
+    "📍 [Edital, 7.3 e 8.5.2, p. 3–4]",             # intervalo de páginas
+    "📍 [TR, 6.2 e 9.3, p. 7 e 8]",                 # páginas soltas
+    '"15 (quinze) dias corridos" [TR, 6.2, p. 7]',   # transcrição + forma curta
+])
+def test_forma_curta_correta(docs, texto):
+    assert nivel_curto(docs, texto) == ("OK", "")
+
+
+@pytest.mark.parametrize("texto, trecho_msg", [
+    ("[TR, 6.2, p. 3]", "item 6.2 está na(s) p. [7]"),
+    ("[TR, 99.1, p. 7]", "item 99.1 não encontrado em Anexo I"),
+    ("[Minuta, cl. 7.1, p. 7]", "não na(s) p. [7]"),
+    ("[ETP, seção 5, p. 2]", "nem apelido declarado"),
+    ('"30 (trinta) dias corridos" [TR, 6.2, p. 7]', "não está na(s) página(s) citada(s); aparece na p. [3]"),
+])
+def test_forma_curta_errada(docs, texto, trecho_msg):
+    n, msg = nivel_curto(docs, texto)
+    assert n == "ERRO" and trecho_msg in msg
+
+
+def test_legenda_no_proprio_texto(docs):
+    texto = f"<!-- orbital:alias TR={ED}:Anexo I; Edital={ED} -->\n📍 [TR, 6.2, p. 7] · [Edital, 7.3, p. 3]"
+    resultados = vc.verificar(texto, docs)
+    assert [r["nivel"] for r in resultados] == ["OK", "OK"]

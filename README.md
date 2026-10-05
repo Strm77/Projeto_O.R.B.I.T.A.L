@@ -12,7 +12,9 @@ orbital/
 ├── references/
 │   ├── go-no-go.md             # critérios eliminatórios (rodam primeiro)
 │   ├── campos-extracao.md      # campos a extrair do edital, TR e anexos
-│   └── entregas.md             # formato das 4 entregas iniciais
+│   ├── entregas.md             # formato das entregas (inclui perguntas e respostas)
+│   └── tipos/
+│       └── licenciamento-software.md  # guia: renovação/aquisição de licenças
 └── scripts/
     ├── extrair_pdf.py          # PDF → trechos com {arquivo, página, seção, item} + OCR
     ├── gerar_planilhas.py      # JSON da análise → .xlsx (habilitação, requisitos, prazos, Go/No-Go)
@@ -21,8 +23,9 @@ orbital/
     └── requirements.txt
 tests/
 ├── test_extrair_pdf.py
-└── fixtures/                   # edital fictício (15 p.) + errata escaneada + gerador
-    └── referencia/             # análise de referência (teste de regressão)
+├── fixtures/                   # edital fictício (15 p.) + errata escaneada + gerador
+│   └── referencia/             # análise de referência (teste de regressão)
+└── gabaritos/                  # análises reais revisadas, usadas para ensinar e avaliar a skill
 ```
 
 ## Instalação (Claude Code)

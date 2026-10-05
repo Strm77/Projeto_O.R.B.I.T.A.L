@@ -57,6 +57,21 @@ Siga os passos na ordem. Não pule o passo 1.
    Proposta" referido no edital mas ausente). Peça ao usuário ou marque como lacuna.
 4. Se houver número de páginas ilegível/escaneado sem OCR, avise que citações de página
    podem ficar imprecisas.
+5. **Fase do certame** — compare a data da sessão com hoje e diga no topo da resposta:
+   - *pré-sessão*: fluxo completo, começando pelo Go/No-Go;
+   - *pós-sessão* (sessão já passou): avise em destaque que a sessão e a impugnação
+     já venceram (com as datas). O Go/No-Go vira histórico; priorize resultado,
+     proposta ajustada, documentos, assinatura, riscos de execução e o que levar à
+     reunião inicial;
+   - *execução* (contrato assinado): foque em prazos de entrega, recebimento,
+     pagamento, indicadores e sanções.
+6. **Tipo de contratação** — classifique o objeto e, se houver guia em
+   `references/tipos/`, leia-o antes do Passo 1 e use o banco de perguntas dele:
+
+   | Tipo | Guia |
+   |------|------|
+   | Renovação/aquisição de licenças e subscrições de software | `references/tipos/licenciamento-software.md` |
+   | Outros (serviços contínuos, fábrica de software, service desk, nuvem, hardware) | ainda sem guia — use só as referências gerais |
 
 ### Passo 1 — Go/No-Go (eliminatório)
 Leia `references/go-no-go.md` e execute o checklist **antes de qualquer outra análise**.
@@ -140,8 +155,12 @@ pelo `extrair_pdf.py`** (nome do arquivo, anexo, cláusula, item, alínea, pági
 > `[edital.pdf, Anexo IV — Minuta de Termo de Contrato, cláusula 7, item 7.1, p. 13]`
 > `[errata_01.pdf, item 2, p. 1]`
 
-- Não abrevie para `[Edital, ...]` ou `[TR, ...]`: o verificador (Passo 4b) não
-  consegue conferir citações fora do formato e as reporta como erro.
+- **Forma curta, com legenda:** `[TR, 4.8.1–4.8.3, p. 7–8]`, `[Edital, 6.5, 6.8, 6.11, p. 9–10]`,
+  `[ETP, seções 8–10, p. 8–13]`, `[Minuta, cl. 4.1, p. 24]` são aceitas **desde que** a
+  resposta comece com a legenda (`Abreviações: TR = tr.pdf · Minuta = edital.pdf, Anexo II`)
+  e o verificador rode com os mesmos apelidos:
+  `verificar_citacoes.py analise.md edital.pdf tr.pdf --alias TR=tr.pdf --alias "Minuta=edital.pdf:Anexo II"`.
+  Sem legenda, abreviação é erro.
 - Item que atravessa páginas: cite o intervalo (`p. 3–4`); citar só a primeira página
   falha quando o trecho transcrito está na segunda.
 - Se o documento não tiver numeração de item, use a seção/cláusula/título mais próximo.
@@ -224,6 +243,7 @@ Quando edital, TR, anexos ou minuta divergirem:
 | `references/go-no-go.md` | Passo 1, sempre antes de tudo |
 | `references/campos-extracao.md` | Passo 2 e perguntas pontuais sobre campos |
 | `references/entregas.md` | Passo 4 e quando o usuário pedir uma das entregas |
+| `references/tipos/*.md` | Passo 0.6: guia do tipo de contratação (estrutura, campos, perguntas, armadilhas) |
 
 | Script (`scripts/`) | Quando usar |
 |---------------------|-------------|
