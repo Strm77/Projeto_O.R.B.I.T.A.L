@@ -40,8 +40,11 @@ Legenda usada em todas as entregas:
 | # | Critério | Citação |
 |---|----------|---------|
 
-### Depende do perfil da empresa
-- <dados que faltam para fechar o veredito>
+### Lista de Confirmação Interna (dados confidenciais da empresa)
+| # | Área responsável | O que confirmar | Exigência do edital (transcrita) | Fonte | Prazo-limite |
+|---|------------------|-----------------|----------------------------------|-------|--------------|
+
+Veredito condicionado: GO **se** os itens <n> forem confirmados.
 ```
 
 Regras: impeditivos primeiro; se não houver nenhum, escrever "Nenhum impeditivo

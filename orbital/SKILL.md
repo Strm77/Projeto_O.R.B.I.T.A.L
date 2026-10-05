@@ -117,8 +117,11 @@ Sem acesso à rede, diga que o domínio `pncp.gov.br` precisa estar liberado.
 
 ### Passo 1 — Go/No-Go (eliminatório)
 Leia `references/go-no-go.md` e execute o checklist **antes de qualquer outra análise**.
-- Se faltar o Perfil da Empresa, pergunte o mínimo necessário (porte, atestados,
-  certificações, índices) ou rode com resultado "ATENÇÃO — depende do perfil".
+- **Dados internos da empresa** (atestados, certificações de profissionais, índices
+  contábeis) **não são fornecidos**: são confidenciais. Não pergunte por eles. Use o que
+  houver (níveis de parceria e escopo da base de parceiros) e, para o resto, gere a
+  **Lista de Confirmação Interna** (ver `references/go-no-go.md`). Esses itens ficam
+  "ATENÇÃO — confirmar internamente", nunca GO por suposição.
 - Qualquer item NO-GO: entregue o Go/No-Go e **pergunte** se o usuário quer seguir
   com o restante mesmo assim.
 
