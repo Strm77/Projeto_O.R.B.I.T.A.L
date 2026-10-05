@@ -1,0 +1,437 @@
+{
+  "certame": "Pregão Eletrônico nº 90042/2026 — AETI-VS (fictício)",
+  "habilitacao": [
+    {
+      "exigencia": "Contrato social em vigor com objeto compatível",
+      "tipo": "jurídica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.2, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "CNPJ",
+      "tipo": "fiscal",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.3, alínea a, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Certidão conjunta RFB/PGFN",
+      "tipo": "fiscal",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.3, alínea b, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "CRF — FGTS",
+      "tipo": "fiscal",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.3, alínea c, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "CNDT",
+      "tipo": "fiscal",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.3, alínea d, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Regularidade com Fazenda Estadual e Municipal da sede",
+      "tipo": "fiscal",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.3, alínea e, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Certidão negativa de falência (distribuidor da sede)",
+      "tipo": "econômica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.4.1, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Balanço e DRE dos 2 últimos exercícios; LG, SG e LC > 1",
+      "tipo": "econômica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.4.2, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Se algum índice ≤ 1: PL ≥ 10% do estimado (R$ 218.400,00 — calculado)",
+      "tipo": "econômica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.4.3, p. 3]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Atestado: Service Desk SaaS ITIL, ≥ 150 agentes simultâneos, ≥ 12 meses (soma permitida se concomitante)",
+      "tipo": "técnica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.5.2, p. 3–4]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Atestado: migração de ≥ 500.000 registros de sistema legado (61% de 820.000 — ver impugnação)",
+      "tipo": "técnica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.5.2, p. 3–4]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Declaração do fabricante: autorizado a comercializar e dar suporte no Brasil",
+      "tipo": "técnica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.5.3, p. 4]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Declaração de armazenamento em data centers no Brasil",
+      "tipo": "técnica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.5.4, p. 4]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    },
+    {
+      "exigencia": "Vistoria facultativa ou declaração de pleno conhecimento",
+      "tipo": "técnica",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.6, p. 4]",
+      "status": "Pendente",
+      "validade": "",
+      "obs": ""
+    }
+  ],
+  "requisitos": [
+    {
+      "requisito": "[RF-01] Registrar chamados por portal web, e-mail, aplicativo móvel e chat, com numeração única. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.1, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RF-02] Permitir catálogo de serviços hierárquico com no mínimo 3 níveis e formulários dinâmicos. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.2, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RF-03] Classificar chamados em incidente, requisição, problema e mudança, aderente às práticas ITIL v4. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.3, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RF-04] Calcular automaticamente prazos de SLA por prioridade, considerando calendário de feriados. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.4, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RF-05] Escalonar automaticamente chamados com SLA em risco, notificando grupo e gestor.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.5, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RF-06] Possuir base de conhecimento com versionamento, aprovação e busca textual.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.6, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RF-07] Oferecer pesquisa de satisfação configurável ao encerramento do chamado.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.7, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RF-08] Permitir automação de fluxos sem programação (low-code), com aprovações paralelas. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.8, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RF-09] Gerar painéis e relatórios exportáveis em CSV e PDF, com agendamento de envio.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.9, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RF-10] Disponibilizar API REST documentada para integração com sistemas da Contratante. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 2.10, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RNF-01] Disponibilidade mínima de 99,5% ao mês, medida conforme IMR do Termo de Referência.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.1, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-02] Armazenar os dados exclusivamente em data centers localizados no Brasil.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.2, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-03] Possuir certificação ISO/IEC 27001 vigente para o ambiente de nuvem ofertado.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.3, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-04] Autenticação única (SSO) via SAML 2.0 ou OpenID Connect, com suporte a MFA. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.4, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RNF-05] Criptografia de dados em trânsito (TLS 1.2 ou superior) e em repouso (AES-256).",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.5, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-06] Registro de trilha de auditoria de todas as ações de agentes e administradores por 5 anos.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.6, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-07] Interface integralmente em português do Brasil, inclusive mensagens e ajuda. (POC)",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.7, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": "POC"
+    },
+    {
+      "requisito": "[RNF-08] Acessibilidade conforme eMAG, versão 3.1, no portal do usuário final.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.8, p. 10]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-09] Backup diário com retenção mínima de 30 dias e RPO de 24 horas.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.9, p. 11]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "[RNF-10] Suportar no mínimo 400 agentes simultâneos sem degradação de desempenho.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 3.10, p. 11]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "Atendimento em português, das 8h às 18h em dias úteis (8x5), por telefone, e-mail e portal.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 4.1, p. 11]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "Incidentes críticos (P1) deverão ser atendidos em regime 24x7, independentemente do horário contratado para o suporte.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 4.2, p. 11]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    },
+    {
+      "requisito": "Atualizações de versão da plataforma serão comunicadas com antecedência mínima de 15 dias e aplicadas primeiro no ambiente de homologação.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo II — Requisitos Técnicos da Solução, item 4.3, p. 11]",
+      "atende": "",
+      "evidencia": "",
+      "responsavel": "",
+      "obs": ""
+    }
+  ],
+  "prazos": [
+    {
+      "evento": "Limite impugnação/esclarecimento (ALTERADO pela errata; era 15/10)",
+      "data_hora": "2026-10-28 23:59",
+      "fonte": "[errata_01_digitalizada.pdf, item 2, p. 1] (OCR — conferir)"
+    },
+    {
+      "evento": "Último dia para vistoria (calculado: último dia útil antes da sessão)",
+      "data_hora": "2026-10-30 17:00",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo I — Termo de Referência, item 8.1, p. 7]"
+    },
+    {
+      "evento": "Limite de resposta da Administração aos pedidos (calculado)",
+      "data_hora": "2026-10-30",
+      "fonte": "[edital_pe_90042_2026.pdf, item 10.3, p. 4]"
+    },
+    {
+      "evento": "Abertura da sessão / limite de proposta (ALTERADO pela errata; era 20/10)",
+      "data_hora": "2026-11-03 10:00",
+      "fonte": "[errata_01_digitalizada.pdf, item 1, p. 1] (OCR — conferir)"
+    },
+    {
+      "evento": "Proposta ajustada ao último lance",
+      "data_hora": "convocação + 2 h",
+      "fonte": "[edital_pe_90042_2026.pdf, item 5.3, p. 2]"
+    },
+    {
+      "evento": "Início da POC (duração até 2 d.u.)",
+      "data_hora": "convocação + até 5 d.u.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo I — Termo de Referência, item 9.2, p. 7]"
+    },
+    {
+      "evento": "Razões de recurso",
+      "data_hora": "ata + 3 d.u.",
+      "fonte": "[edital_pe_90042_2026.pdf, item 9.2, p. 4]"
+    },
+    {
+      "evento": "Assinatura do contrato",
+      "data_hora": "Não encontrado",
+      "fonte": "—"
+    },
+    {
+      "evento": "Reunião inicial / OS",
+      "data_hora": "assinatura + 5 d.u.",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo I — Termo de Referência, item 4.1, p. 6]"
+    },
+    {
+      "evento": "Garantia contratual 5%",
+      "data_hora": "assinatura + 10 d.u.",
+      "fonte": "[edital_pe_90042_2026.pdf, item 11.1, p. 4]"
+    },
+    {
+      "evento": "Conclusão da implantação — CONTRADIÇÃO: 30 dias da assinatura × 15 dias da OS",
+      "data_hora": "ver contradição nº 1",
+      "fonte": "[edital_pe_90042_2026.pdf, item 7.3, p. 3] · [edital_pe_90042_2026.pdf, Anexo I — Termo de Referência, item 6.2, p. 7]"
+    }
+  ],
+  "go_no_go": [
+    {
+      "criterio": "A1/A2 Sessão futura e tempo hábil (03/11/2026, 19 d.u.)",
+      "resultado": "GO",
+      "fonte": "[errata_01_digitalizada.pdf, item 1, p. 1]"
+    },
+    {
+      "criterio": "A3 Vistoria",
+      "resultado": "GO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.6, p. 4]"
+    },
+    {
+      "criterio": "A4 POC: 5 d.u. após convocação, 8 requisitos",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo I — Termo de Referência, item 9.2, p. 7]"
+    },
+    {
+      "criterio": "B1 Exclusividade ME/EPP",
+      "resultado": "GO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 2.2, p. 1]"
+    },
+    {
+      "criterio": "B2 Sanções impeditivas — depende do perfil",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 2.3, alínea b, p. 1]"
+    },
+    {
+      "criterio": "B3 Consórcio vedado — depende do perfil",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 2.3, alínea d, p. 2]"
+    },
+    {
+      "criterio": "B5 Presença física",
+      "resultado": "NÃO ENCONTRADO",
+      "fonte": "—"
+    },
+    {
+      "criterio": "C1/C2 Atestados e quantitativos — depende do perfil",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.5.2, p. 3–4]"
+    },
+    {
+      "criterio": "C4 Declaração do fabricante — depende do perfil",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.5.3, p. 4]"
+    },
+    {
+      "criterio": "C5 Certificações de profissionais não são habilitação",
+      "resultado": "GO",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo I — Termo de Referência, item 5.2, p. 7]"
+    },
+    {
+      "criterio": "D1/D2 Índices e PL — depende do perfil",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 8.4.2, p. 3]"
+    },
+    {
+      "criterio": "F2 Garantia de proposta",
+      "resultado": "GO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 11.2, p. 4]"
+    },
+    {
+      "criterio": "F3 IMR cumulativo com sanções",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, Anexo IV — Minuta de Termo de Contrato, cláusula 7, item 7.3, p. 13]"
+    },
+    {
+      "criterio": "F4 Implantação paga após recebimento definitivo",
+      "resultado": "ATENÇÃO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 13.2, p. 5]"
+    },
+    {
+      "criterio": "F5 Reajuste ICTI",
+      "resultado": "GO",
+      "fonte": "[edital_pe_90042_2026.pdf, item 13.3, p. 5]"
+    }
+  ]
+}

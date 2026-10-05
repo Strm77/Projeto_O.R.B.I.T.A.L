@@ -1,7 +1,8 @@
 # Entregas iniciais
 
 Quatro entregas, nesta ordem, ao final do fluxo de análise de um edital novo.
-Todas em Markdown, com citações no formato `[Documento, item, p.]`.
+Todas em Markdown, com citações no formato do `extrair_pdf.py`
+(`[arquivo.pdf, Anexo …, item X, p. N]` — ver Regra 1 do SKILL.md).
 
 Cabeçalho comum (uma vez, antes da Entrega 1):
 
@@ -29,7 +30,7 @@ Legenda usada em todas as entregas:
 ### Impeditivos (⛔)
 | # | Critério | Situação | Citação | Reversível? |
 |---|----------|----------|---------|-------------|
-| C2 | Quantitativo mínimo de atestado | Exige 60% do total (5.000 UST); empresa tem 2.800 | [Edital, 9.11.2, p. 21] | Sim — impugnação até 14/10/2026 (art. 67, §2º [VERIFICAR]) |
+| C2 | Quantitativo mínimo de atestado | Exige 60% do total (5.000 UST); empresa tem 2.800 | `[edital.pdf, item 9.11.2, p. 21]` | Sim — impugnação até 14/10/2026 (art. 67, §2º [VERIFICAR]) |
 
 ### Pontos de atenção (⚠️ / ❓)
 | # | Critério | Situação | Citação |
@@ -110,9 +111,9 @@ habilitação/aceitação da proposta; (3) o que afeta preço.
 
 | Ordem | Risco | Documento · item · páginas | O que verificar | Por quê |
 |-------|-------|----------------------------|-----------------|---------|
-| 1 | 🔴 | TR, item 12 (IMR), p. 30–34 | Fórmula de glosa e teto | Glosa cumulativa com multa; teto ausente |
-| 2 | 🔴 | Edital, 9.11 · TR, 15.3 | Quantitativos de atestado | ❗ Edital pede 50%, TR pede 60% |
-| 3 | 🟡 | Minuta, cláusula 8 | Prazo de pagamento | 30 dias após aceite definitivo (aceite em até 90) |
+| 1 | 🔴 | `[edital.pdf, Anexo I — Termo de Referência, item 12, p. 30–34]` (IMR) | Fórmula de glosa e teto | Glosa cumulativa com multa; teto ausente |
+| 2 | 🔴 | `[edital.pdf, item 9.11, p. 20]` · `[edital.pdf, Anexo I — Termo de Referência, item 15.3, p. 41]` | Quantitativos de atestado | ❗ Edital pede 50%, TR pede 60% |
+| 3 | 🟡 | `[edital.pdf, Anexo IV — Minuta de Termo de Contrato, cláusula 8, p. 52]` | Prazo de pagamento | 30 dias após aceite definitivo (aceite em até 90) |
 | ... | 🟢 | Edital, 1–5 | Disposições gerais | Conferência |
 ```
 
@@ -129,12 +130,12 @@ Referência: hoje = dd/mm/aaaa (dia). Horário de Brasília.
 
 | Data/hora | Dia | Evento | Fonte | Tipo | Dias úteis restantes | Status | Ação |
 |-----------|-----|--------|-------|------|----------------------|--------|------|
-| 09/10/2026 17:00 | sex | Fim do agendamento de vistoria | [TR, 6.2, p. 8] | Edital | 4 | Aberto | Agendar com fulano@órgão |
-| 14/10/2026 23:59 | qua | Limite impugnação/esclarecimento | [Edital, 18.1, p. 30] | Edital | 6 | Aberto | Enviar pedidos #1 e #2 |
+| 09/10/2026 17:00 | sex | Fim do agendamento de vistoria | `[edital.pdf, Anexo I — Termo de Referência, item 6.2, p. 8]` | Edital | 4 | Aberto | Agendar com fulano@órgão |
+| 14/10/2026 23:59 | qua | Limite impugnação/esclarecimento | `[edital.pdf, item 18.1, p. 30]` | Edital | 6 | Aberto | Enviar pedidos #1 e #2 |
 | 14/10/2026 | qua | Conferência: 3 dias úteis antes da abertura | art. 164, Lei 14.133 | Calculado | — | — | Conferir se bate com o edital |
-| 19/10/2026 10:00 | seg | Abertura da sessão / limite de proposta | [Edital, preâmbulo, p. 1] ⚠️ ALTERADO por [Errata 1, item 1, p. 1] | Edital | 9 | Aberto | Proposta cadastrada até 18/10 |
-| (convocação) + 2h | — | Envio de proposta ajustada e documentos | [Edital, 7.5, p. 12] | Relativo | — | — | Deixar documentos prontos |
-| (resultado) + 3 d.u. | — | Razões de recurso | [Edital, 14.2, p. 26] · art. 165 | Relativo | — | — | — |
+| 19/10/2026 10:00 | seg | Abertura da sessão / limite de proposta | `[errata_01.pdf, item 1, p. 1]` ⚠️ ALTERADO (era `[edital.pdf, preâmbulo, p. 1]`) | Edital | 9 | Aberto | Proposta cadastrada até 18/10 |
+| (convocação) + 2h | — | Envio de proposta ajustada e documentos | `[edital.pdf, item 7.5, p. 12]` | Relativo | — | — | Deixar documentos prontos |
+| (resultado) + 3 d.u. | — | Razões de recurso | `[edital.pdf, item 14.2, p. 26]` · art. 165 | Relativo | — | — | — |
 ```
 
 Regras:
