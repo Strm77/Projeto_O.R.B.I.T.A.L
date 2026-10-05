@@ -179,16 +179,20 @@ def resumir(r: dict) -> dict:
     }
 
 
-def abertas(ate: str, modalidade: int | None, uf: str | None, max_paginas: int) -> list[dict]:
+def abertas(ate: str, modalidade: int | None, uf: str | None, max_paginas: int,
+            cnpj: str | None = None, uasg: str | None = None) -> list[dict]:
     """Contratações com recebimento de propostas aberto até a data."""
     return _paginar("contratacoes/proposta", {"dataFinal": _data(ate), "codigoModalidadeContratacao": modalidade,
-                                              "uf": uf}, max_paginas)
+                                              "uf": uf, "cnpj": cnpj, "codigoUnidadeAdministrativa": uasg},
+                    max_paginas)
 
 
-def publicadas(de: str, ate: str, modalidade: int, uf: str | None, max_paginas: int) -> list[dict]:
+def publicadas(de: str, ate: str, modalidade: int, uf: str | None, max_paginas: int,
+               cnpj: str | None = None, uasg: str | None = None) -> list[dict]:
     """Contratações publicadas no período (a API exige a modalidade)."""
     return _paginar("contratacoes/publicacao", {"dataInicial": _data(de), "dataFinal": _data(ate),
-                                                "codigoModalidadeContratacao": modalidade, "uf": uf}, max_paginas)
+                                                "codigoModalidadeContratacao": modalidade, "uf": uf, "cnpj": cnpj,
+                                                "codigoUnidadeAdministrativa": uasg}, max_paginas)
 
 
 def contratos(de: str, ate: str, cnpj_orgao: str | None, max_paginas: int) -> list[dict]:
@@ -369,6 +373,8 @@ def main(argv: list[str] | None = None) -> int:
                        required=nome == "abertas")
         p.add_argument("--modalidade", choices=MODALIDADES, default=None if nome == "abertas" else "pregao")
         p.add_argument("--uf")
+        p.add_argument("--cnpj", help="CNPJ do órgão (só dígitos)")
+        p.add_argument("--uasg", help="código da unidade administrativa (UASG)")
         p.add_argument("--palavra", action="append", default=[], help="filtra o objeto (repita para várias)")
         p.add_argument("--dados-ia", action="store_true", help="usa a lista TERMOS_DADOS_IA como palavras")
         p.add_argument("--max-paginas", type=int, default=400)
@@ -432,8 +438,8 @@ def main(argv: list[str] | None = None) -> int:
                 "data_desejada")
         else:
             mod = MODALIDADES.get(a.modalidade) if a.modalidade else None
-            regs = (abertas(a.ate, mod, a.uf, a.max_paginas) if a.cmd == "abertas"
-                    else publicadas(a.de, a.ate, mod, a.uf, a.max_paginas))
+            regs = (abertas(a.ate, mod, a.uf, a.max_paginas, a.cnpj, a.uasg) if a.cmd == "abertas"
+                    else publicadas(a.de, a.ate, mod, a.uf, a.max_paginas, a.cnpj, a.uasg))
             itens = [resumir(r) for r in filtrar(regs, a.palavra + (TERMOS_DADOS_IA if a.dados_ia else []))]
             titulo = "Contratações com proposta aberta" if a.cmd == "abertas" else "Contratações publicadas"
             md = lambda: para_markdown(itens, titulo)

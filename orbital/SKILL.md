@@ -85,7 +85,10 @@ Sem acesso à rede, diga que o domínio `pncp.gov.br` precisa estar liberado.
    errata sem data são anomalias — sinalize no inventário e peça conferência no original
    (em documento escaneado, a data pode ser erro de OCR).
 3. Registre documentos **citados mas não fornecidos** (ex.: "Anexo VII — Modelo de
-   Proposta" referido no edital mas ausente). Peça ao usuário ou marque como lacuna.
+   Proposta" referido no edital mas ausente). **Antes de marcar lacuna, procure no PNCP**:
+   ache a contratação (`pncp.py publicadas --cnpj <órgão> --uasg <UASG>` no período da
+   publicação, ou `abertas`) e rode `pncp.py arquivos <controle>`. Erratas, esclarecimentos
+   e anexos-modelo costumam estar lá. Não achou → peça ao usuário ou marque como lacuna.
    Se faltar um documento-base (**Edital**, **ETP**, **TR** ou a minuta), avise **no topo
    da resposta**, antes de qualquer análise, e diga quais perguntas ficam sem resposta
    por isso (ex.: sem Edital não há data, modo de disputa nem prazo de impugnação; sem ETP
