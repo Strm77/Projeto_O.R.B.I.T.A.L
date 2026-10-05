@@ -55,7 +55,13 @@ precisa da base e siga sem ela.
    comprovam nada**. Se o edital exigir declaração do fabricante, nível de parceria ou
    profissional certificado e o campo estiver vazio, o Go/No-Go fica **ATENÇÃO —
    depende do perfil**.
-7. **Preço de lista não é cotação.** Valores em USD da base são referência pública.
+7. **Nível de parceria exigido:** se o edital pedir nível mínimo, declaração do fabricante
+   ou "parceiro autorizado", compare com a tabela de níveis do índice.
+   - Nível abaixo do exigido → NO-GO naquele item.
+   - Ordem dos níveis marcada [VERIFICAR] → ATENÇÃO até confirmar no programa do fabricante.
+   - Fabricante sem documento na base (só o nível): atenda apenas o que o edital permite
+     comprovar com o nível; para o mapa de produtos, diga que a base não cobre.
+8. **Preço de lista não é cotação.** Valores em USD da base são referência pública.
    - Use-os só como ordem de grandeza e rotule "estimativa (preço de lista)".
    - Aponte o **risco cambial** quando o contrato for em BRL.
    - Aponte o **teto do catálogo de preços do governo**, quando a base disser que
