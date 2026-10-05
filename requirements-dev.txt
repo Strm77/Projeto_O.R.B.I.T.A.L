@@ -1,0 +1,3 @@
+-r orbital/scripts/requirements.txt
+pytest>=8
+reportlab>=4   # só para regenerar tests/fixtures

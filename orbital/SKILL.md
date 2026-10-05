@@ -29,6 +29,23 @@ participar** (licitante), e não do órgão.
 Siga os passos na ordem. Não pule o passo 1.
 
 ### Passo 0 — Inventário de documentos
+0. Se os documentos forem PDF, extraia o texto com o script da skill antes de ler:
+
+   ```bash
+   python <dir-da-skill>/scripts/extrair_pdf.py edital.pdf tr.pdf errata*.pdf -f md -o extracao.md
+   ```
+
+   - Cada trecho sai com a citação pronta, ex.: `[edital.pdf, Anexo I — Termo de Referência, item 6.2, p. 9]`.
+     Use essas citações nas respostas (Regra 1); não recalcule páginas de memória.
+   - Use `-f json` quando precisar filtrar por item/seção; o campo `indice` lista as
+     páginas de cada item (itens que atravessam páginas: cite `p. 3–4`).
+   - Páginas sem camada de texto passam por OCR (`por`). Trechos de OCR trazem
+     `confianca_ocr`; números, datas e percentuais vindos de OCR devem ser marcados
+     "(OCR — conferir no original)".
+   - Se o script avisar que o OCR não rodou, informe ao usuário quais páginas ficaram
+     sem conteúdo — nunca trate essas páginas como "não encontrado".
+   - Dependências: `pip install -r <dir-da-skill>/scripts/requirements.txt` e, para OCR,
+     `tesseract-ocr` + `tesseract-ocr-por`.
 1. Liste todos os documentos recebidos com: nome, tipo (edital, TR, ETP, anexo nº X,
    minuta de contrato, errata, adendo, resposta a esclarecimento, resposta a impugnação),
    data de publicação e nº de páginas.
