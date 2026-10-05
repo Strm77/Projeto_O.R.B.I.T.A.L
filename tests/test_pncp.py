@@ -66,3 +66,10 @@ def test_controle_e_data_invalidos():
         pncp._partes_controle("123/2026")
     with pytest.raises(pncp.ErroPNCP):
         pncp._data("31-31-2026")
+
+
+def test_detalhe(monkeypatch):
+    urls = []
+    monkeypatch.setattr(pncp, "_get", lambda url, params=None, tentativas=3: urls.append(url) or b'{"anoCompra": 2026}')
+    assert pncp.detalhe("00394460000141-1-000123/2026") == {"anoCompra": 2026}
+    assert urls == ["https://pncp.gov.br/api/consulta/v1/orgaos/00394460000141/compras/2026/123"]

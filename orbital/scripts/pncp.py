@@ -6,11 +6,14 @@ objeto e baixa os arquivos (edital, TR, anexos) de uma contratação para o extr
 
     python pncp.py abertas --ate 2026-10-31 --modalidade pregao --palavra dados --palavra "business intelligence"
     python pncp.py publicadas --de 2026-10-01 --ate 2026-10-05 --uf DF
+    python pncp.py detalhe 00394460000141-1-000123/2026
     python pncp.py arquivos 00394460000141-1-000123/2026 -o editais/
 
 Documentação oficial: https://pncp.gov.br/api/consulta/swagger-ui/index.html
-Os caminhos e campos abaixo seguem o Manual de Integração do PNCP; confira no Swagger se
-algum mudar (variáveis BASE_* e MODALIDADES).
+Caminhos conferidos no Swagger (05/10/2026): /v1/contratacoes/proposta, /v1/contratacoes/publicacao
+e /v1/orgaos/{cnpj}/compras/{ano}/{sequencial}. A lista de arquivos vem da API de integração
+(/api/pncp/v1/.../arquivos). Nomes de parâmetros e campos seguem o Manual de Integração;
+confira em /pncp-consulta/v3/api-docs se algum mudar (BASE_*, MODALIDADES).
 """
 
 from __future__ import annotations
@@ -153,6 +156,12 @@ def _partes_controle(controle: str) -> tuple[str, str, str]:
     return m["cnpj"], m["ano"], str(int(m["seq"]))
 
 
+def detalhe(controle: str) -> dict:
+    """Dados de uma contratação (GET /v1/orgaos/{cnpj}/compras/{ano}/{sequencial})."""
+    cnpj, ano, seq = _partes_controle(controle)
+    return json.loads(_get(f"{BASE_CONSULTA}/orgaos/{cnpj}/compras/{ano}/{seq}") or b"{}")
+
+
 def baixar_arquivos(controle: str, destino: Path) -> list[Path]:
     """Baixa os documentos de uma contratação (edital, TR, anexos, erratas)."""
     cnpj, ano, seq = _partes_controle(controle)
@@ -206,12 +215,17 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--max-paginas", type=int, default=20)
         p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
         p.add_argument("-o", "--saida", type=Path)
+    p = sub.add_parser("detalhe")
+    p.add_argument("controle")
     p = sub.add_parser("arquivos")
     p.add_argument("controle", help="número de controle PNCP, ex.: 00394460000141-1-000123/2026")
     p.add_argument("-o", "--saida", type=Path, default=Path("."))
     a = ap.parse_args(argv)
 
     try:
+        if a.cmd == "detalhe":
+            print(json.dumps(detalhe(a.controle), ensure_ascii=False, indent=2))
+            return 0
         if a.cmd == "arquivos":
             for c in baixar_arquivos(a.controle, a.saida):
                 print(c)
