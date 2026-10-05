@@ -103,6 +103,13 @@ Leia `references/go-no-go.md` e execute o checklist **antes de qualquer outra an
 Leia `references/campos-extracao.md` e preencha todos os campos. Campo sem previsão
 nos documentos = "Não encontrado". Nunca preencha com o "padrão de mercado".
 
+### Passo 2b — Aderência ao portfólio de parceiros
+Se existir `<dir-da-skill>/perfil/parceiros/` e o objeto envolver software (ou serviços
+sobre software), leia `references/parceiros.md` e monte a **Matriz de Aderência**
+(Entrega 6): requisito do edital → parceiro/produto → status, com as checagens de
+residência de dados, on-premises, preview, hardware fora de escopo, nomenclatura legada,
+métrica e carta do fabricante. O que vem da base fica rotulado e nunca vira fato do edital.
+
 ### Passo 3 — Varredura de contradições
 Cruze, no mínimo: objeto, quantitativos, prazos de execução/entrega, SLA/IMR, valores,
 exigências de habilitação técnica, forma de pagamento, garantia, vigência e sanções
@@ -143,6 +150,7 @@ Leia `references/entregas.md`. O que entregar depende da fase e do pedido:
 | Pós-sessão | Go/No-Go como **histórico** (curto) · Perguntas e Respostas ou Ficha · Calendário pós-sessão · pauta da reunião inicial (o Roteiro é opcional) |
 | Execução | Calendário de execução · obrigações e indicadores · pauta de reunião |
 
+Com base de parceiros, inclua a **Matriz de Aderência** (Entrega 6) logo depois do Go/No-Go.
 Sempre acrescente ao final **Contradições e Pedidos de Esclarecimento sugeridos** (se
 houver) e **Lacunas**.
 
@@ -289,6 +297,7 @@ Quando edital, TR, anexos ou minuta divergirem:
 | `references/go-no-go.md` | Passo 1, sempre antes de tudo |
 | `references/campos-extracao.md` | Passo 2 e perguntas pontuais sobre campos |
 | `references/entregas.md` | Passo 4 e quando o usuário pedir uma das entregas |
+| `references/parceiros.md` | Passo 2b: aderência ao portfólio de parceiros (base em `perfil/parceiros/`, fora do git) |
 | `references/tipos/*.md` | Passo 0.6: guia do tipo de contratação (estrutura, campos, perguntas, armadilhas) |
 
 | Script (`scripts/`) | Quando usar |

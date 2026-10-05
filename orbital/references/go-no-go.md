@@ -41,6 +41,10 @@ Certidões fiscais/trabalhistas regulares: sim | não (quais pendentes)
 Recuperação judicial: sim | não
 ```
 
+Se existir `<dir-da-skill>/perfil/parceiros/`, use-a para os campos de parcerias e
+escopo (o que a empresa vende e o que está fora, como hardware). Campos `[A PREENCHER]`
+da base contam como **não informados** — ver `references/parceiros.md`.
+
 ## Checklist eliminatório
 
 Ordem sugerida: do mais rápido/objetivo ao mais analítico.

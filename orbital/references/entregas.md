@@ -195,6 +195,12 @@ Regras:
 
 ---
 
+## Entrega 6 — Matriz de Aderência ao Portfólio (com base de parceiros)
+
+Formato e regras em `references/parceiros.md`. Vai logo depois do Go/No-Go.
+
+---
+
 ## Após as quatro entregas
 
 ```markdown

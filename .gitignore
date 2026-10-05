@@ -1,3 +1,4 @@
 saida/
 __pycache__/
 .pytest_cache/
+orbital/perfil/
