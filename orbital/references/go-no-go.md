@@ -24,26 +24,18 @@ Regras:
 A avaliação depende destes dados. Atestados, certificações de profissionais e dados
 contábeis são **confidenciais e não serão fornecidos**: não pergunte por eles. O que a
 skill tem: níveis de parceria e escopo (base de parceiros) e o que o usuário disser na
-conversa. Para o restante, gere a Lista de Confirmação Interna abaixo.
+conversa.
 
-### Lista de Confirmação Interna
+A skill **sempre informa tudo o que o edital exige que a empresa tenha**, inclusive o
+que é confidencial, no **Checklist de Exigências** (`references/entregas.md`, Entrega 1b).
+O time interno confere cada linha sem expor nada à skill. Itens que dependem de dado
+interno ficam "🔒 confirmar internamente" e o veredito fica condicionado a eles:
+"GO **se** os itens 3, 7 e 9 forem confirmados". Nunca GO por suposição.
 
-Entregue logo depois do veredito. É o que o time interno (comercial, jurídico,
-contabilidade, gestão de atestados) responde sem expor nada à skill. Cada linha traz a
-exigência **exata** do edital, para a pessoa responder sim/não sem precisar ler o edital:
+Se o usuário responder na conversa ("temos", "não temos"), atualize o veredito, mas não
+grave esses dados em arquivo nenhum.
 
-| # | Área responsável | O que confirmar | Exigência do edital (transcrita) | Fonte | Prazo-limite |
-|---|------------------|-----------------|----------------------------------|-------|--------------|
-| 1 | Gestão de atestados | Temos atestado de fornecimento de licenças IBM com ≥ 50% do quantitativo? | "..." | [edital.pdf, item 8.11, p. 12] | entrega com a proposta, até dd/mm |
-| 2 | Contabilidade | LG, SG e LC > 1 no último balanço? Patrimônio líquido ≥ R$ X (calculado: 10% de R$ Y)? | "..." | [...] | — |
-| 3 | Comercial / alianças | Fabricante emite declaração de parceria a tempo? | "..." | [...] | dd/mm (calculado) |
-
-- Uma linha por exigência que dependa de dado interno; nada de "verificar habilitação"
-  genérico.
-- Valores derivados (PL mínimo, quantitativo de 50%) saem calculados, com a conta.
-- O veredito final fica condicionado: "GO **se** os itens 1–3 forem confirmados".
-- Se o usuário responder na conversa ("temos", "não temos"), atualize o veredito, mas
-  não grave esses dados em arquivo nenhum.
+Campos abaixo: referência do que o Checklist cobre (não é questionário ao usuário).
 
 ```
 Razão social / CNPJ:

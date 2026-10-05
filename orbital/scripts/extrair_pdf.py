@@ -482,8 +482,14 @@ def extrair(caminho: Path, ocr: str = "auto") -> tuple[Documento, list[Trecho]]:
     trechos: list[Trecho] = []
     for n_pag, (blocos, metodo) in enumerate(zip(paginas_blocos, metodos), start=1):
         pars = list(_paragrafos(blocos))
+        # Página de sumário (3+ linhas "TÍTULO ...... 6"): nenhum parágrafo abre item ou cláusula.
+        eh_sumario = sum(bool(RE_SUMARIO.search(l)) for b in blocos for l in b.linhas) >= 3
         for idx, (par, conf, eh_tabela) in enumerate(pars):
             marc = None if eh_tabela else _marcador(par[0])
+            if marc and marc["tipo"] in ("item", "clausula") and (eh_sumario or any(RE_SUMARIO.search(l) for l in par[1:4])):
+                # Sumário: "1." numa linha e "TÍTULO ...... 6" na seguinte, ou título longo
+                # ("... LANCES . 9") seguido de outras linhas de sumário no mesmo parágrafo.
+                marc = None
             if marc and marc["tipo"] == "item" and _linha_de_tabela(marc["n"], pars[idx + 1:idx + 4]):
                 # Linha numerada que ficou fora da grade da tabela seguinte
                 # ("1.6 Cloud Pak ... 8 36 meses" antes de "| 1.7 | ..."): é dado, não item.

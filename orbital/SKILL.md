@@ -119,9 +119,12 @@ Sem acesso à rede, diga que o domínio `pncp.gov.br` precisa estar liberado.
 Leia `references/go-no-go.md` e execute o checklist **antes de qualquer outra análise**.
 - **Dados internos da empresa** (atestados, certificações de profissionais, índices
   contábeis) **não são fornecidos**: são confidenciais. Não pergunte por eles. Use o que
-  houver (níveis de parceria e escopo da base de parceiros) e, para o resto, gere a
-  **Lista de Confirmação Interna** (ver `references/go-no-go.md`). Esses itens ficam
-  "ATENÇÃO — confirmar internamente", nunca GO por suposição.
+  houver (níveis de parceria e escopo da base de parceiros).
+- Mesmo assim, **diga tudo o que o edital exige que a empresa tenha**: o **Checklist de
+  Exigências** (Entrega 1b) lista cada atestado, índice, certidão, declaração,
+  certificação e garantia, com a exigência transcrita, fonte, prazo e quem providencia.
+  Os itens que dependem de dado interno ficam "🔒 confirmar internamente" e condicionam
+  o veredito; nunca GO por suposição.
 - Qualquer item NO-GO: entregue o Go/No-Go e **pergunte** se o usuário quer seguir
   com o restante mesmo assim.
 
@@ -171,8 +174,8 @@ Leia `references/entregas.md`. O que entregar depende da fase e do pedido:
 
 | Situação | Entregas, nesta ordem |
 |----------|-----------------------|
-| Pré-sessão (ou fase indeterminada), pedido genérico | Go/No-Go · Ficha-Resumo · Roteiro de Leitura · Calendário de Prazos |
-| Usuário pede **perguntas e respostas**, ou existe guia do tipo | Go/No-Go (curto) · **Perguntas e Respostas** (Entrega 5, substitui a Ficha) · Roteiro de Leitura · Calendário |
+| Pré-sessão (ou fase indeterminada), pedido genérico | Go/No-Go · **Checklist de Exigências** · Ficha-Resumo · Roteiro de Leitura · Calendário de Prazos |
+| Usuário pede **perguntas e respostas**, ou existe guia do tipo | Go/No-Go (curto) · **Checklist de Exigências** · **Perguntas e Respostas** (Entrega 5, substitui a Ficha) · Roteiro de Leitura · Calendário |
 | Pós-sessão | Go/No-Go como **histórico** (curto) · Perguntas e Respostas ou Ficha · Calendário pós-sessão · pauta da reunião inicial (o Roteiro é opcional) |
 | Execução | Calendário de execução · obrigações e indicadores · pauta de reunião |
 

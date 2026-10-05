@@ -105,3 +105,9 @@ def test_teste_cego_citacoes(pasta, pdfs, total):
     resultados = vc.verificar(texto, docs, vc.ler_apelidos([]))
     assert len(resultados) == total
     assert [(r["citacao"], r["msg"]) for r in resultados if r["nivel"] != "OK"] == []
+
+
+def test_sumario_com_numero_em_linha_separada(extraidos):
+    # p. 2 do edital: "1." numa linha e "DO OBJETO ........ 4" na seguinte — não é item.
+    _, trechos = extraidos["edital"]
+    assert not any(t.pagina == 2 and t.item for t in trechos)

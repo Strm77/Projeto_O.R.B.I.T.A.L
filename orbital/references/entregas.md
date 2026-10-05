@@ -40,15 +40,63 @@ Legenda usada em todas as entregas:
 | # | Critério | Citação |
 |---|----------|---------|
 
-### Lista de Confirmação Interna (dados confidenciais da empresa)
-| # | Área responsável | O que confirmar | Exigência do edital (transcrita) | Fonte | Prazo-limite |
-|---|------------------|-----------------|----------------------------------|-------|--------------|
-
-Veredito condicionado: GO **se** os itens <n> forem confirmados.
+### Condições do veredito
+GO **se** os itens <n> do Checklist de Exigências forem confirmados internamente.
 ```
 
 Regras: impeditivos primeiro; se não houver nenhum, escrever "Nenhum impeditivo
 identificado". Não esconder ✅ — a lista mostra o que foi verificado.
+
+---
+
+## Entrega 1b — Checklist de Exigências (o que a empresa precisa ter)
+
+Sempre na análise pré-sessão, logo depois do Go/No-Go. Responde: **"o que eu preciso
+ter e entregar para participar e ganhar este certame?"**. Lista **todas** as exigências
+do edital, TR e anexos (já com erratas aplicadas), não só as eliminatórias.
+
+```markdown
+## 1b. Checklist de Exigências
+
+Legenda: 🔒 dado interno (confirmar com o time; a skill não recebe) · 📄 documento
+público ou de emissão (certidão, SICAF, balanço publicado) · 🤝 depende do fabricante ·
+✍️ declaração ou modelo do edital (preencher e assinar) · 💰 garantia ou custo.
+
+### A. Com a proposta (até a abertura da sessão — dd/mm/aaaa hh:mm)
+| # | O que precisa ter | Exigência (transcrita) | Fonte | Tipo | Responsável | Status |
+|---|-------------------|------------------------|-------|------|-------------|--------|
+| 1 | Proposta no modelo do Anexo III com marca, modelo, SKU e prazo de validade de 90 dias | "..." | [edital.pdf, item 4.3, p. 6] | ✍️ | Comercial | |
+
+### B. Habilitação (quando o pregoeiro convocar — prazo: N horas)
+Subgrupos na ordem do edital: **jurídica · fiscal, social e trabalhista ·
+econômico-financeira · técnica**. Cada atestado, índice, certidão e declaração em linha
+própria. Valores derivados calculados ("PL ≥ R$ 984.000,00 — calculado: 10% de
+R$ 9.840.000,00").
+
+### C. Depois da sessão (proposta ajustada, amostra/POC, diligências)
+### D. Para assinar o contrato (garantia contratual, preposto, termos de sigilo)
+### E. Durante a execução (certificações a manter, equipe mínima, seguros)
+
+### Resumo
+- N exigências · 🔒 x a confirmar internamente · 🤝 y dependem do fabricante · prazo mais curto: ...
+- **Itens que eliminam** (sem eles a proposta é desclassificada ou a empresa inabilitada): #...
+```
+
+Regras:
+- **Uma linha por exigência.** Nada de "documentos de habilitação conforme edital".
+  Atestado com quantitativo, período e objeto exatos; índice com fórmula e valor mínimo;
+  certidão com o órgão emissor.
+- **Exigência transcrita** entre aspas, com citação verificável (Regra 1).
+- **Status** fica vazio para o time preencher. A skill só preenche quando a informação
+  for pública ou estiver na base de parceiros (ex.: nível de parceria → "✅ Gold
+  (base de parceiros)").
+- **Quando entregar** vem do edital; se o prazo for relativo ("2 horas após convocação"),
+  diga isso.
+- Inclua o que vem **de anexos-modelo** (declarações) e do **TR** (equipe, certificações,
+  POC), não só da seção de habilitação do edital.
+- Exigência ambígua ou contraditória → linha normal + ❗ e referência à tabela de
+  contradições.
+- A mesma lista alimenta a aba **Checklist Habilitação** da planilha.
 
 ---
 
