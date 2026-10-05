@@ -82,3 +82,53 @@ def test_resumo_usa_campos_do_schema():
     i = pncp.resumir(r)
     assert i["modo_disputa"] == "Aberto" and i["amparo_legal"].startswith("Lei 14.133")
     assert i["publicado_em"] == "2026-10-04T11:46:12" and i["orgao"] == "MINISTÉRIO X"
+
+
+def _api_unica(monkeypatch, pagina_unica):
+    chamadas = []
+
+    def falso(url, params=None, tentativas=3):
+        chamadas.append((url, params))
+        return json.dumps({"data": pagina_unica, "paginasRestantes": 0}).encode()
+
+    monkeypatch.setattr(pncp, "_get", falso)
+    return chamadas
+
+
+def test_contratos(monkeypatch):
+    c = _api_unica(monkeypatch, [{"numeroControlePNCP": "x", "objetoContrato": "Subscrição Power BI Pro",
+                                  "orgaoEntidade": {"razaoSocial": "ÓRGÃO"}, "valorGlobal": 10.5,
+                                  "dataVigenciaFim": "2027-01-31", "nomeRazaoSocialFornecedor": "EMPRESA"},
+                                 {"objetoContrato": "Limpeza predial"}])
+    regs = pncp.contratos("01/01/2026", "05/10/2026", "123", 3)
+    assert c[0][0].endswith("/v1/contratos") and c[0][1]["cnpjOrgao"] == "123" and c[0][1]["dataInicial"] == "20260101"
+    itens = [pncp.resumir_contrato(r) for r in pncp.filtrar(regs, ["power bi"], ("objetoContrato",))]
+    assert len(itens) == 1 and itens[0]["fornecedor"] == "EMPRESA" and itens[0]["vigencia_fim"] == "2027-01-31"
+    md = pncp.tabela_markdown(itens, "T", [("Fim", "vigencia_fim"), ("Valor", "valor_global")], "vigencia_fim")
+    assert "| 2027-01-31 | R$ 10,50 |" in md
+
+
+def test_atas(monkeypatch):
+    c = _api_unica(monkeypatch, [{"numeroControlePNCPAta": "a1", "objetoContratacao": "Observabilidade de aplicações",
+                                  "possibilidadeAdesao": True}])
+    itens = [pncp.resumir_ata(r) for r in pncp.filtrar(pncp.atas("2026-10-01", "2027-10-01", None, 1),
+                                                         ["observabilidade"], ("objetoContratacao",))]
+    assert c[0][0].endswith("/v1/atas") and itens[0]["adesao"] is True
+
+
+def test_pca_por_atualizacao_achata_itens(monkeypatch):
+    c = _api_unica(monkeypatch, [{"idPcaPncp": "p1", "anoPca": 2027, "orgaoEntidadeRazaoSocial": "ÓRGÃO",
+                                  "itens": [{"descricaoItem": "Plataforma de dados em nuvem", "valorTotal": 5},
+                                            {"descricaoItem": "Cadeiras"}]}])
+    regs = pncp.pca(None, None, "2026-09-01", "2026-10-05", None, 2)
+    assert c[0][0].endswith("/v1/pca/atualizacao") and c[0][1]["dataInicio"] == "20260901" and "dataInicial" not in c[0][1]
+    itens = [pncp.resumir_pca(r) for r in pncp.filtrar(regs, ["dados"], ("descricaoItem",))]
+    assert [(i["plano"], i["item"]) for i in itens] == [("p1", "Plataforma de dados em nuvem")]
+
+
+def test_pca_por_ano_e_classe(monkeypatch):
+    c = _api_unica(monkeypatch, [])
+    pncp.pca(2027, "70", None, None, None, 1)
+    assert c[0][0].endswith("/v1/pca/") and c[0][1]["anoPca"] == 2027 and c[0][1]["codigoClassificacaoSuperior"] == "70"
+    with pytest.raises(pncp.ErroPNCP):
+        pncp.pca(2027, None, None, None, None, 1)

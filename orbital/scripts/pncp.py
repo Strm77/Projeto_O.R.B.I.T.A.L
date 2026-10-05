@@ -6,15 +6,18 @@ objeto e baixa os arquivos (edital, TR, anexos) de uma contratação para o extr
 
     python pncp.py abertas --ate 2026-10-31 --modalidade pregao --palavra dados --palavra "business intelligence"
     python pncp.py publicadas --de 2026-10-01 --ate 2026-10-05 --uf DF
+    python pncp.py contratos --de 2026-01-01 --ate 2026-10-05 --palavra "business intelligence"
+    python pncp.py atas --de 2026-10-01 --ate 2027-10-01 --palavra observabilidade
+    python pncp.py pca --de 2026-09-01 --ate 2026-10-05 --palavra "plataforma de dados"
     python pncp.py detalhe 00394460000141-1-000123/2026
     python pncp.py arquivos 00394460000141-1-000123/2026 -o editais/
 
 Documentação oficial: https://pncp.gov.br/api/consulta/swagger-ui/index.html
-Caminhos conferidos no Swagger (05/10/2026): /v1/contratacoes/proposta, /v1/contratacoes/publicacao
-e /v1/orgaos/{cnpj}/compras/{ano}/{sequencial}. A lista de arquivos vem da API de integração
-(/api/pncp/v1/.../arquivos). Campos de resposta conferidos nos schemas RecuperarCompraPublicacaoDTO e
-RecuperarCompraDTO (05/10/2026). Nomes de parâmetros seguem o Manual de Integração;
-confira em /pncp-consulta/v3/api-docs se algum mudar (BASE_*, MODALIDADES).
+Caminhos, parâmetros e campos conferidos no Swagger em 05/10/2026: contratacoes/proposta,
+contratacoes/publicacao, orgaos/{cnpj}/compras/{ano}/{sequencial}, contratos, atas, pca/ e
+pca/atualizacao (este usa dataInicio/dataFim, não dataInicial/dataFinal). Datas: yyyyMMdd.
+A lista de arquivos vem da API de integração (/api/pncp/v1/.../arquivos), fora do Swagger de
+consulta. Se algo mudar, confira em /pncp-consulta/v3/api-docs (BASE_*, MODALIDADES).
 """
 
 from __future__ import annotations
@@ -102,14 +105,15 @@ def _sem_acento(s: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", s.lower()) if unicodedata.category(c) != "Mn")
 
 
-def filtrar(registros: list[dict], palavras: list[str]) -> list[dict]:
-    """Mantém registros cujo objeto ou informação complementar contém alguma palavra (sem acento)."""
+def filtrar(registros: list[dict], palavras: list[str],
+            campos: tuple[str, ...] = ("objetoCompra", "informacaoComplementar")) -> list[dict]:
+    """Mantém registros em que algum dos campos contém alguma palavra (sem acento nem caixa)."""
     if not palavras:
         return registros
     alvos = [_sem_acento(p) for p in palavras]
     saida = []
     for r in registros:
-        texto = _sem_acento(f"{r.get('objetoCompra') or ''} {r.get('informacaoComplementar') or ''}")
+        texto = _sem_acento(" ".join(str(r.get(c) or "") for c in campos))
         achadas = [p for p, a in zip(palavras, alvos) if a in texto]
         if achadas:
             saida.append({**r, "_palavras": achadas})
@@ -155,6 +159,74 @@ def publicadas(de: str, ate: str, modalidade: int, uf: str | None, max_paginas: 
                                                 "codigoModalidadeContratacao": modalidade, "uf": uf}, max_paginas)
 
 
+def contratos(de: str, ate: str, cnpj_orgao: str | None, max_paginas: int) -> list[dict]:
+    """Contratos/empenhos publicados no período (GET /v1/contratos)."""
+    return _paginar("contratos", {"dataInicial": _data(de), "dataFinal": _data(ate), "cnpjOrgao": cnpj_orgao},
+                    max_paginas)
+
+
+def atas(de: str, ate: str, cnpj: str | None, max_paginas: int) -> list[dict]:
+    """Atas de registro de preços com vigência no período (GET /v1/atas)."""
+    return _paginar("atas", {"dataInicial": _data(de), "dataFinal": _data(ate), "cnpj": cnpj}, max_paginas)
+
+
+def pca(ano: int | None, classe: str | None, de: str | None, ate: str | None, cnpj: str | None,
+        max_paginas: int) -> list[dict]:
+    """Itens dos Planos de Contratações Anuais, um registro por item (com dados do plano).
+
+    Com ano + classe: GET /v1/pca/ (anoPca, codigoClassificacaoSuperior).
+    Senão: GET /v1/pca/atualizacao (dataInicio, dataFim, cnpj) — planos atualizados no período.
+    """
+    if ano and classe:
+        planos = _paginar("pca/", {"anoPca": ano, "codigoClassificacaoSuperior": classe}, max_paginas)
+    elif de and ate:
+        planos = _paginar("pca/atualizacao", {"dataInicio": _data(de), "dataFim": _data(ate), "cnpj": cnpj},
+                          max_paginas)
+    else:
+        raise ErroPNCP("pca: informe --ano e --classe, ou --de e --ate")
+    itens = []
+    for plano in planos:
+        cabecalho = {k: v for k, v in plano.items() if k != "itens"}
+        if ano and plano.get("anoPca") not in (None, ano):
+            continue
+        itens += [{**cabecalho, **item} for item in plano.get("itens") or []]
+    return itens
+
+
+def resumir_contrato(r: dict) -> dict:
+    orgao, unidade = r.get("orgaoEntidade") or {}, r.get("unidadeOrgao") or {}
+    return {
+        "controle": r.get("numeroControlePNCP"), "controle_compra": r.get("numeroControlePncpCompra"),
+        "orgao": orgao.get("razaoSocial"), "uf": unidade.get("ufSigla"),
+        "fornecedor": r.get("nomeRazaoSocialFornecedor"), "ni_fornecedor": r.get("niFornecedor"),
+        "objeto": " ".join((r.get("objetoContrato") or "").split()),
+        "valor_global": r.get("valorGlobal"), "vigencia_inicio": r.get("dataVigenciaInicio"),
+        "vigencia_fim": r.get("dataVigenciaFim"), "tipo": (r.get("tipoContrato") or {}).get("nome"),
+        "palavras": r.get("_palavras", []),
+    }
+
+
+def resumir_ata(r: dict) -> dict:
+    return {
+        "controle": r.get("numeroControlePNCPAta"), "controle_compra": r.get("numeroControlePNCPCompra"),
+        "orgao": r.get("nomeOrgao"), "objeto": " ".join((r.get("objetoContratacao") or "").split()),
+        "vigencia_inicio": r.get("vigenciaInicio"), "vigencia_fim": r.get("vigenciaFim"),
+        "adesao": r.get("possibilidadeAdesao"), "cancelada": r.get("cancelado"),
+        "palavras": r.get("_palavras", []),
+    }
+
+
+def resumir_pca(r: dict) -> dict:
+    return {
+        "plano": r.get("idPcaPncp"), "orgao": r.get("orgaoEntidadeRazaoSocial"), "unidade": r.get("nomeUnidade"),
+        "ano": r.get("anoPca"), "item": " ".join((r.get("descricaoItem") or "").split()),
+        "classe": r.get("classificacaoSuperiorNome"), "categoria": r.get("categoriaItemPcaNome"),
+        "grupo_contratacao": r.get("grupoContratacaoNome"), "quantidade": r.get("quantidadeEstimada"),
+        "valor_total": r.get("valorTotal"), "data_desejada": r.get("dataDesejada"),
+        "palavras": r.get("_palavras", []),
+    }
+
+
 def _partes_controle(controle: str) -> tuple[str, str, str]:
     m = RE_CONTROLE.match(controle.strip())
     if not m:
@@ -192,6 +264,32 @@ def baixar_arquivos(controle: str, destino: Path) -> list[Path]:
     return salvos
 
 
+def _reais(v) -> str:
+    if not isinstance(v, (int, float)):
+        return "n.i."
+    return f"R$ {v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def _curto(t: str, n: int = 180) -> str:
+    t = (t or "").replace("|", "/")
+    return t[:n] + ("…" if len(t) > n else "")
+
+
+def tabela_markdown(itens: list[dict], titulo: str, colunas: list[tuple[str, str]], ordem: str) -> str:
+    """Tabela genérica: colunas = [(cabeçalho, chave)]; chaves 'valor_*' saem em R$."""
+    linhas = [f"# {titulo}", "", f"_PNCP, consultado em {date.today():%d/%m/%Y} · {len(itens)} registro(s)_", "",
+              "| " + " | ".join(c for c, _ in colunas) + " |", "|" + "---|" * len(colunas)]
+    for i in sorted(itens, key=lambda x: str(x.get(ordem) or "")):
+        celulas = []
+        for _, k in colunas:
+            v = i.get(k)
+            v = _reais(v) if k.startswith("valor") else ", ".join(v) if isinstance(v, list) else \
+                ("sim" if v is True else "não" if v is False else _curto(str(v or "")[:200]))
+            celulas.append(v)
+        linhas.append("| " + " | ".join(celulas) + " |")
+    return "\n".join(linhas) + "\n"
+
+
 def para_markdown(itens: list[dict], titulo: str) -> str:
     linhas = [f"# {titulo}", "", f"_PNCP, consultado em {date.today():%d/%m/%Y} · {len(itens)} contratação(ões)_", "",
               "| Encerra propostas | Órgão (UF) | Modalidade | Objeto | Valor estimado | Palavras | Link |",
@@ -221,6 +319,25 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--max-paginas", type=int, default=20)
         p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
         p.add_argument("-o", "--saida", type=Path)
+    for nome in ("contratos", "atas"):
+        p = sub.add_parser(nome)
+        p.add_argument("--de", required=True)
+        p.add_argument("--ate", default=date.today().isoformat())
+        p.add_argument("--cnpj", help="CNPJ do órgão")
+        p.add_argument("--palavra", action="append", default=[])
+        p.add_argument("--max-paginas", type=int, default=20)
+        p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
+        p.add_argument("-o", "--saida", type=Path)
+    p = sub.add_parser("pca", help="itens dos Planos de Contratações Anuais")
+    p.add_argument("--ano", type=int)
+    p.add_argument("--classe", help="código de classificação superior (com --ano)")
+    p.add_argument("--de")
+    p.add_argument("--ate")
+    p.add_argument("--cnpj")
+    p.add_argument("--palavra", action="append", default=[])
+    p.add_argument("--max-paginas", type=int, default=20)
+    p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
+    p.add_argument("-o", "--saida", type=Path)
     p = sub.add_parser("detalhe")
     p.add_argument("controle")
     p = sub.add_parser("arquivos")
@@ -236,19 +353,43 @@ def main(argv: list[str] | None = None) -> int:
             for c in baixar_arquivos(a.controle, a.saida):
                 print(c)
             return 0
-        mod = MODALIDADES.get(a.modalidade) if a.modalidade else None
-        regs = (abertas(a.ate, mod, a.uf, a.max_paginas) if a.cmd == "abertas"
-                else publicadas(a.de, a.ate, mod, a.uf, a.max_paginas))
-        itens = [resumir(r) for r in filtrar(regs, a.palavra)]
+        if a.cmd == "contratos":
+            regs = contratos(a.de, a.ate, a.cnpj, a.max_paginas)
+            itens = [resumir_contrato(r) for r in filtrar(regs, a.palavra, ("objetoContrato", "informacaoComplementar"))]
+            md = lambda: tabela_markdown(itens, "Contratos publicados", [
+                ("Fim da vigência", "vigencia_fim"), ("Órgão (UF)", "orgao"), ("Fornecedor", "fornecedor"),
+                ("Objeto", "objeto"), ("Valor global", "valor_global"), ("Palavras", "palavras"),
+                ("Controle", "controle")], "vigencia_fim")
+        elif a.cmd == "atas":
+            regs = atas(a.de, a.ate, a.cnpj, a.max_paginas)
+            itens = [resumir_ata(r) for r in filtrar(regs, a.palavra, ("objetoContratacao",))]
+            md = lambda: tabela_markdown(itens, "Atas de registro de preços", [
+                ("Fim da vigência", "vigencia_fim"), ("Órgão", "orgao"), ("Objeto", "objeto"),
+                ("Aceita adesão", "adesao"), ("Cancelada", "cancelada"), ("Palavras", "palavras"),
+                ("Ata", "controle")], "vigencia_fim")
+        elif a.cmd == "pca":
+            regs = pca(a.ano, a.classe, a.de, a.ate, a.cnpj, a.max_paginas)
+            itens = [resumir_pca(r) for r in filtrar(regs, a.palavra, ("descricaoItem", "classificacaoSuperiorNome",
+                                                                      "grupoContratacaoNome"))]
+            md = lambda: tabela_markdown(itens, "Itens de Planos de Contratações Anuais", [
+                ("Data desejada", "data_desejada"), ("Órgão", "orgao"), ("Item", "item"), ("Classe", "classe"),
+                ("Quantidade", "quantidade"), ("Valor total", "valor_total"), ("Palavras", "palavras")],
+                "data_desejada")
+        else:
+            mod = MODALIDADES.get(a.modalidade) if a.modalidade else None
+            regs = (abertas(a.ate, mod, a.uf, a.max_paginas) if a.cmd == "abertas"
+                    else publicadas(a.de, a.ate, mod, a.uf, a.max_paginas))
+            itens = [resumir(r) for r in filtrar(regs, a.palavra)]
+            titulo = "Contratações com proposta aberta" if a.cmd == "abertas" else "Contratações publicadas"
+            md = lambda: para_markdown(itens, titulo)
     except ErroPNCP as e:
         print(f"erro: {e}", file=sys.stderr)
         return 2
 
-    titulo = "Contratações com proposta aberta" if a.cmd == "abertas" else "Contratações publicadas"
-    texto = json.dumps(itens, ensure_ascii=False, indent=2) if a.formato == "json" else para_markdown(itens, titulo)
+    texto = json.dumps(itens, ensure_ascii=False, indent=2) if a.formato == "json" else md()
     if a.saida:
         a.saida.write_text(texto, encoding="utf-8")
-        print(f"{len(itens)} de {len(regs)} contratação(ões) → {a.saida}", file=sys.stderr)
+        print(f"{len(itens)} de {len(regs)} registro(s) → {a.saida}", file=sys.stderr)
     else:
         print(texto)
     return 0

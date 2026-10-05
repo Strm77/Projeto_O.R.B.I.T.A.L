@@ -37,6 +37,13 @@ python <dir-da-skill>/scripts/pncp.py abertas --ate <dd/mm/aaaa> --modalidade pr
 python <dir-da-skill>/scripts/pncp.py arquivos <numeroControlePNCP> -o editais/<caso>/
 ```
 
+Inteligência de mercado (mesmo script):
+- `contratos` — contratos de dados/IA publicados; ordena pelo **fim da vigência**: contrato
+  vencendo é licitação nova chegando; mostra quem é o fornecedor atual;
+- `atas` — atas de registro de preços vigentes e se aceitam **adesão**;
+- `pca` — itens dos **Planos de Contratações Anuais**: demanda prevista antes do edital
+  (`--de/--ate` para planos atualizados no período, ou `--ano` + `--classe`).
+
 A lista vem dos dados que o órgão cadastrou no PNCP. Cite-a como "PNCP, consultado em
 dd/mm/aaaa", não como texto do edital. A análise começa no Passo 0, com os arquivos baixados.
 Sem acesso à rede, diga que o domínio `pncp.gov.br` precisa estar liberado.

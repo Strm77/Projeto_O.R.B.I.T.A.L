@@ -76,14 +76,17 @@ python orbital/scripts/pncp.py abertas --ate 31/10/2026 --modalidade pregao \
     --palavra dados --palavra "business intelligence" --palavra observabilidade -o oportunidades.md
 # publicados no período (a API exige a modalidade; padrão: pregão)
 python orbital/scripts/pncp.py publicadas --de 01/10/2026 --ate 05/10/2026 --uf DF
+# inteligência de mercado: contratos vencendo, atas com adesão, planos anuais
+python orbital/scripts/pncp.py contratos --de 01/01/2025 --ate 05/10/2026 --palavra "business intelligence"
+python orbital/scripts/pncp.py atas --de 05/10/2026 --ate 05/10/2027 --palavra observabilidade
+python orbital/scripts/pncp.py pca --de 01/09/2026 --ate 05/10/2026 --palavra "plataforma de dados"
 # baixar edital, TR e anexos de uma contratação
 python orbital/scripts/pncp.py arquivos 00394460000141-1-000123/2026 -o editais/caso/
 ```
 
-Os caminhos seguem o Manual de Integração do PNCP
-(https://pncp.gov.br/api/consulta/swagger-ui/index.html). Ainda **não foram testados contra
-a API real**: os testes usam respostas simuladas. Na primeira execução real, confira se os
-campos batem.
+Caminhos, parâmetros e campos conferidos no Swagger
+(https://pncp.gov.br/api/consulta/swagger-ui/index.html) em 05/10/2026. Os testes usam
+respostas simuladas. Falta a primeira execução contra a API real.
 
 ## Testes
 
