@@ -60,3 +60,34 @@ def test_citacoes_do_gabarito_conferem():
     resultados = vc.verificar(texto, docs, vc.ler_apelidos(APELIDOS))
     assert len(resultados) == 89
     assert [(r["citacao"], r["msg"]) for r in resultados if r["nivel"] != "OK"] == []
+
+
+# --- MIDR, TR 7/2026 (serviços de dados): TR + Anexos A a K -------------------------
+
+MIDR = Path(__file__).parent / "gabaritos" / "midr_tr_7_2026_dados"
+MIDR_PDFS = sorted(MIDR.glob("*.pdf"))
+MIDR_APELIDOS = ["TR=tr.pdf"] + [f"An. {l}=anexo_{l.lower()}.pdf" for l in "ABCDEFGHIJK"]
+sem_midr = pytest.mark.skipif(len(MIDR_PDFS) != 12, reason="PDFs do MIDR ausentes")
+
+
+@sem_midr
+def test_midr_padroes_de_pdf_real():
+    _, tr = ex.extrair(MIDR / "tr.pdf")
+    # "​1.1." (caractere invisível) e itens após subtítulo em caixa normal ("Consórcio")
+    assert any(t.item == "1.1" and t.pagina == 1 for t in tr)
+    assert any(t.item == "4.81" and t.pagina == 19 and "consórcio" in t.texto for t in tr)
+    # anexo que se intitula "ANEXO I" vira seção raiz do próprio arquivo
+    _, an_i = ex.extrair(MIDR / "anexo_i.pdf")
+    assert all(t.secao and t.secao.startswith("Anexo I ") for t in an_i if t.pagina == 3)
+
+
+@sem_midr
+def test_midr_citacoes_do_gabarito():
+    docs = vc.carregar(MIDR_PDFS)
+    texto = (MIDR / "perguntas.md").read_text(encoding="utf-8")
+    resultados = vc.verificar(texto, docs, vc.ler_apelidos(MIDR_APELIDOS))
+    assert len(resultados) == 82
+    erros = [r["citacao"] for r in resultados if r["nivel"] != "OK"]
+    # Único erro conhecido: "No ETP" entre aspas é paráfrase de "estabelecida no Estudo
+    # Técnico Preliminar" (Anexo D, p. 1) — ver notas_revisao.md.
+    assert erros == ["[An. D, p. 1]"]

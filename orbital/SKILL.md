@@ -42,6 +42,9 @@ Siga os passos na ordem. Não pule o passo 1.
    - Páginas sem camada de texto passam por OCR (`por`). Trechos de OCR trazem
      `confianca_ocr`; números, datas e percentuais vindos de OCR devem ser marcados
      "(OCR — conferir no original)".
+   - TR em **modelo AGU/CGU preenchido** (campos de percentual, prazo, alínea): no texto
+     extraído esses valores saem fora de lugar ("de % ( por cento) 0,2 dois décimos…").
+     Antes de citar número de item de modelo, confira na página (Read do PDF).
    - Se o script avisar que o OCR não rodou, informe ao usuário quais páginas ficaram
      sem conteúdo — nunca trate essas páginas como "não encontrado".
    - Dependências: `bash <dir-da-skill>/scripts/instalar_dependencias.sh` (Tesseract com

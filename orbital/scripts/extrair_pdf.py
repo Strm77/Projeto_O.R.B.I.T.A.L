@@ -63,7 +63,9 @@ RE_CLAUSULA = re.compile(
     r"^CL[ÁA]USULA\s+(?P<n>\d{1,2}|[A-ZÀ-Ú]+)\s*[ªºa]?\s*(?:[-–—.:]\s*)?(?P<resto>.*)$",
     re.IGNORECASE,
 )
-RE_ANEXO = re.compile(r"^ANEXO\s+(?P<n>[IVXL]+|\d{1,2})\b\s*(?:[-–—:.]\s*)?(?P<resto>.*)$")
+RE_ANEXO = re.compile(r"^ANEXO\s+(?P<n>[IVXL]+|\d{1,2}|[A-Z])\b\s*(?:[-–—:.]\s*)?(?P<resto>.*)$")
+# Caracteres invisíveis que alguns geradores de PDF põem no início da linha ("\u200b1.1.").
+RE_INVISIVEIS = re.compile(r"[\u200b\u200c\u200d\ufeff\u00ad]")
 RE_PAGINA_IMPRESSA = re.compile(
     r"\bp[áa]g(?:ina)?\.?\s*(?P<n>\d{1,4})(?:\s*(?:de|/|\|)\s*\d{1,4})?\b", re.IGNORECASE
 )
@@ -205,7 +207,7 @@ def _blocos_texto(pagina: fitz.Page) -> list[Bloco]:
         centro = fitz.Point((x0 + x1) / 2, (y0 + y1) / 2)
         if any(centro in r for r, _ in tabelas):
             continue  # já capturado como tabela
-        linhas = [l.strip() for l in texto.splitlines() if l.strip()]
+        linhas = [l.strip() for l in RE_INVISIVEIS.sub("", texto).splitlines() if l.strip()]
         if linhas:
             blocos.append(Bloco(linhas, y0 / altura, y1 / altura))
     blocos.sort(key=lambda b: b.y0)
@@ -294,7 +296,14 @@ def _separar_margens(paginas: list[list[Bloco]]) -> tuple[list[list[Bloco]], lis
 # --- Montagem de parágrafos e trechos ---------------------------------------
 
 def _termina_frase(linha: str) -> bool:
-    return linha.endswith((".", ";", ":", "!", "?")) or linha.isupper()
+    return linha.endswith((".", ";", ":", "!", "?")) or linha.isupper() or _eh_subtitulo(linha)
+
+
+def _eh_subtitulo(linha: str) -> bool:
+    """Subtítulo em caixa normal antes de um item ("Consórcio", "Requisitos de Garantia")."""
+    palavras = linha.split()
+    return (0 < len(palavras) <= 8 and linha[:1].isupper()
+            and not linha.endswith((",", "-", "–")) and not re.search(r"\d", linha))
 
 
 def _paragrafos(blocos: list[Bloco]):
@@ -306,7 +315,8 @@ def _paragrafos(blocos: list[Bloco]):
             continue
         atual: list[str] = []
         for linha in bloco.linhas:
-            if atual and _termina_frase(atual[-1]) and _marcador(linha):
+            numero_sozinho = RE_ITEM_SOZINHO.match(linha) and "." in linha.rstrip(".")
+            if atual and (numero_sozinho or _termina_frase(atual[-1])) and _marcador(linha):
                 yield atual, bloco.confianca, False
                 atual = []
             atual.append(linha)

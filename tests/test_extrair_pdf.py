@@ -203,3 +203,14 @@ def test_paginacao_impressa(texto, n):
 
 def test_paginacao_n_de_total():
     assert int(ex.RE_PAGINA_DE.match("2 de 17")["n"]) == 2
+
+
+def test_caractere_invisivel_e_subtitulo():
+    assert ex.RE_INVISIVEIS.sub("", "​1.1. Contratação") == "1.1. Contratação"
+    assert ex._eh_subtitulo("Consórcio") and ex._eh_subtitulo("Requisitos de Garantia e Manutenção")
+    assert not ex._eh_subtitulo("o prazo de entrega será de até 30 (trinta) dias, contados a partir da")
+
+
+def test_anexo_com_letra():
+    m = ex._marcador("ANEXO C")
+    assert m and m["tipo"] == "anexo" and m["n"] == "C"

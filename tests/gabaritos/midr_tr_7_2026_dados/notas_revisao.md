@@ -1,36 +1,50 @@
 # Revisão do gabarito — MIDR, TR 7/2026 (serviços de dados)
 
-Revisão **sem os PDFs**: confere coerência interna, contas e sintaxe das citações, não as
-páginas. As 82 citações são reconhecidas pelo verificador (apelidos `TR` e `An. A` a
-`An. K`). Para conferir as páginas, os 12 PDFs precisam vir para esta pasta.
+## Conferência contra os PDFs (05/10/2026)
+
+- **12 PDFs:** TR (48 p.) e Anexos A a K. Edital e ETP continuam ausentes.
+- **Páginas e itens:** 81 das 82 citações conferem (`tests/test_gabaritos.py`). A que
+  não confere é de forma, não de conteúdo (ver R7).
+- **Conteúdo:** as 30 respostas foram lidas contra o texto citado e conferem.
+- **Numeração:** onde há número impresso, ele bate com a página do PDF. Os Anexos C, D,
+  E, F, H e K não têm itens numerados nem número de página impresso: são texto corrido,
+  e citar só a página (`[An. C, p. 5]`) é o certo.
 
 ## Contas
 
 | Conta | Resultado |
 |-------|-----------|
-| Item 1: R$ 326.916,36 × 12 | R$ 3.922.996,32 — o gabarito (e provavelmente o TR) diz **R$ 3.922.996,30** (−R$ 0,02) |
-| Item 2: R$ 142.965,15 × 12 | R$ 1.715.581,80 — o gabarito diz **R$ 1.715.581,75** (−R$ 0,05) |
-| Item 3: R$ 113.951,23 × 12 | R$ 1.367.414,76 ✅ |
-| Soma dos anuais | R$ 7.005.992,81 ✅ (mensal × 12 daria R$ 7.005.992,88) |
-| PL de 10% do estimado | R$ 700.599,28 ✅ |
-| HST: 17.092 ÷ 12 ÷ 141 | ≈ 10,1 profissionais ✅ (bate com os 10 do Item 1) |
-| Atestado de 10.000 h/ano ÷ 17.092 HST/ano | 58,5% do estimado para o Item 1 |
+| TR 1.1: 12 × R$ 326.916,36 | R$ 3.922.996,32, mas a tabela do TR diz **R$ 3.922.996,30** (−R$ 0,02) |
+| TR 1.1: 12 × R$ 142.965,15 | R$ 1.715.581,80, mas a tabela do TR diz **R$ 1.715.581,75** (−R$ 0,05) |
+| Total | R$ 7.005.992,81 = soma dos anuais do TR ✅ (TR 11.1: "máximo aceitável") |
+| PL de 10% | R$ 700.599,28 ✅ |
+| HST (Anexo F, p. 10) | Total 17.092 ✅. A média "141,12" é a média simples das médias dos 9 perfis; como o desenvolvedor conta 2 pessoas, a média real é 17.092 ÷ 10 ÷ 12 = **142,4** HST/mês (🟢, a HST não fatura) |
+| Atestado de 10.000 h/ano | 58,5% das HST do Item 1; ~39% se somada a sustentação |
 
 ## Pontos de revisão
 
 | # | Ponto | Situação | Sugestão |
 |---|-------|----------|----------|
-| R1 | Valores anuais dos Itens 1 e 2 menores que mensal × 12 | 🟢 Diferença de centavos, mas o valor é **teto** (pergunta 2) | Acrescentar: quem cotar exatamente o teto mensal pode estourar o teto anual por centavos; cotar a partir do anual |
-| R2 | Atestado de 10.000 horas/ano (pergunta 29) | ⚠️ Equivale a 58,5% das 17.092 HST/ano estimadas para o Item 1; com a sustentação (5 × 141 × 12 ≈ 8.460 h) cai para ~39% | **Interpretação:** se a base comparável for só projetos, passa do limite de 50% para quantitativo de atestado (art. 67, §2º [VERIFICAR]) — candidato a impugnação, se ainda houver prazo |
-| R3 | Pergunta 24: cadeia de recebimento e pagamento | Fato correto | Acrescentar **Interpretação** de fluxo de caixa: relatório mensal → 5 + 10 dias → 10 + 10 dias úteis ≈ 6 semanas após o fim do mês, sem contar a possível dobra dos prazos |
-| R4 | Pergunta 27 | ✅ Coerente: 0,07% × 25 dias = 1,75%, abaixo do teto de 2% antes do limite de extinção | — |
-| R5 | Sem Go/No-Go e sem calendário | Esperado: sem Edital não há datas | Quando o Edital chegar: calendário e Go/No-Go |
+| R1 | Valores anuais dos Itens 1 e 2 | 🟢 Inconsistência **do próprio TR**: 12 × valor unitário ≠ valor anual | Quem cotar o teto mensal estoura o teto anual por centavos; cotar a partir do anual |
+| R2 | Atestado de 10.000 h/ano (pergunta 29) | ⚠️ O TR 10.30.1.2 admite **converter** outras unidades de fornecimento, se o contrato tiver a regra de conversão — o gabarito não diz | Acrescentar; e a **Interpretação** sobre o limite de 50% (art. 67, §2º [VERIFICAR]) depende da base |
+| R3 | Pergunta 24 (recebimento e pagamento) | ✅ Confere; a liquidação é "prorrogável por igual período" (TR 8.29) | Acrescentar a prorrogação e a interpretação de fluxo de caixa (≈ 6 semanas após o fim do mês, até ≈ 10 se tudo dobrar) |
+| R4 | Pergunta 12: "bancos legados Oracle 11gR2 e SQL Server 2000" | Incompleto: o Anexo D cita SQL Server **2000 a 2016**, MySQL 5.1/5.5 e PostgreSQL 8/9/11 | Listar a faixa toda |
+| R5 | Pergunta 27 (multas) | ✅ Faixa de 2% a 10% confere | Ver N2: os campos do modelo saem embaralhados na extração; confirmar na página quais alíneas cada multa cobre |
+| R6 | Contradição 4 (8x5) | ✅ TR 4.44 confirma 8 horas e 5 dias | — |
+| R7 | Contradição 2: "No ETP" entre aspas `[An. D, p. 1]` | Forma: o texto diz "volumetria de referência estabelecida no Estudo Técnico Preliminar". Aspas só para transcrição literal | Escrever sem aspas ou transcrever o trecho |
 
-## Padrões que este gabarito confirmou em relação ao caso BCB
-- Horário cotado × exigido (BCB: 24x7 × telefone 8x5; MIDR: 8x5 × emergências sem acréscimo).
-- Resíduos de outro edital (BCB: Lei 8.666, "4.94", 2025; MIDR: "Correios").
-- Referência cruzada errada (BCB: item 4.94 inexistente; MIDR: POC no Anexo C × D).
-- Cadeia longa até o pagamento (BCB e MIDR: provisório → definitivo → liquidação → pagamento).
+## O que o gabarito não traz
 
-Viraram regras gerais no SKILL.md (Passo 3). O que é específico deste tipo está em
-`orbital/references/tipos/servicos-ti-sob-demanda.md`.
+| # | Achado | Fonte | Impacto |
+|---|--------|-------|---------|
+| N1 | A volumetria aparece em **três** lugares: o TR diz "estabelecida **neste instrumento**" (mas o TR não traz nenhum número), o Anexo D diz "no Estudo Técnico Preliminar" e o Anexo D (p. 2) e o Anexo K (p. 2) dizem "no Edital" | [TR, 3.5, p. 9] · [An. D, p. 1] · [An. D, p. 2] · [An. K, p. 2] | 🔴 Reforça a contradição nº 2: cada documento manda para um lugar diferente |
+| N2 | O TR usa o modelo da AGU/CGU com campos preenchidos (percentuais, prazos, alíneas). Na extração de texto esses valores saem **fora de lugar** ("de % ( por cento) 0,2 dois décimos…"; "alíneas “ ” a “ ” … a e h") | [TR, 9.2.4, p. 38–39] · [TR, 4.44, p. 14] · [TR, 4.60, p. 16] | Leitura: em itens de modelo preenchido, conferir o número na página |
+| N3 | A equipe de sustentação deve estar montada em até 30 dias corridos da abertura da OS | [An. C, p. 7] | 🟡 Prazo de mobilização que corre junto com a ambientação |
+
+## O que este gabarito ensinou (incorporado à skill)
+- Extração: caractere invisível antes do número do item, item depois de subtítulo em
+  caixa normal, anexo que se intitula "ANEXO C"/"ANEXO I" (seção raiz do arquivo),
+  negrito Markdown dentro de aspas na verificação.
+- Guia `orbital/references/tipos/servicos-ti-sob-demanda.md`: volumetria com três
+  remissões diferentes, tabela de valores com centavos inconsistentes, conversão de
+  unidades no atestado, campos de modelo AGU/CGU.

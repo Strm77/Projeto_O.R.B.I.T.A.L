@@ -141,8 +141,11 @@ def carregar(pdfs: list[Path]):
             if n in doc.paginas_ocr:
                 paginas[n] = "\n".join(t.texto for t in trechos if t.pagina == n)
             else:
-                paginas[n] = pdf[n - 1].get_text("text")
-        docs[caminho.name] = {"doc": doc, "paginas": paginas, "trechos": trechos}
+                paginas[n] = extrair_pdf.RE_INVISIVEIS.sub("", pdf[n - 1].get_text("text"))
+        # Documento que é ele mesmo um anexo ("ANEXO I — Padrões ...") começa já dentro da
+        # seção; citações "[An. I, 2.1, p. 3]" se referem a essa seção.
+        raiz = next((t.secao for t in trechos if t.pagina == 1 and t.secao), None)
+        docs[caminho.name] = {"doc": doc, "paginas": paginas, "trechos": trechos, "secao_raiz": raiz}
     return docs
 
 
@@ -188,9 +191,9 @@ def verificar(texto: str, docs: dict, apelidos: dict | None = None) -> list[dict
             continue
 
         partes = _partes(m["meio"])
-        secao = partes["secao"] or secao_padrao
+        secao = partes["secao"] or secao_padrao or d.get("secao_raiz")
         antes = RE_ASPAS_ANTES.search(texto[max(0, m.start() - 520):m.start()])
-        citado = antes["q"] if antes else None
+        citado = re.sub(r"\*\*|__|`", "", antes["q"]) if antes else None  # tira negrito Markdown
         candidatos = []
         for item in partes["itens"]:
             achados = [
