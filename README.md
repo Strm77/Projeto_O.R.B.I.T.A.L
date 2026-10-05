@@ -15,6 +15,7 @@ orbital/
 │   └── entregas.md             # formato das 4 entregas iniciais
 └── scripts/
     ├── extrair_pdf.py          # PDF → trechos com {arquivo, página, seção, item} + OCR
+    ├── instalar_dependencias.sh # Tesseract + português + pip
     └── requirements.txt
 tests/
 ├── test_extrair_pdf.py
@@ -33,8 +34,8 @@ Depois, basta enviar o edital (e TR, anexos, erratas) e pedir a análise.
 ## Extração de PDF
 
 ```bash
-pip install -r orbital/scripts/requirements.txt
-sudo apt install tesseract-ocr tesseract-ocr-por   # só para PDFs escaneados
+# instala Tesseract + português e os pacotes Python (Linux apt/dnf/pacman ou macOS brew)
+bash orbital/scripts/instalar_dependencias.sh
 
 python orbital/scripts/extrair_pdf.py edital.pdf errata.pdf -f md -o extracao.md
 python orbital/scripts/extrair_pdf.py edital.pdf -f json -o extracao.json

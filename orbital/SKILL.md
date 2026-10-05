@@ -44,8 +44,8 @@ Siga os passos na ordem. Não pule o passo 1.
      "(OCR — conferir no original)".
    - Se o script avisar que o OCR não rodou, informe ao usuário quais páginas ficaram
      sem conteúdo — nunca trate essas páginas como "não encontrado".
-   - Dependências: `pip install -r <dir-da-skill>/scripts/requirements.txt` e, para OCR,
-     `tesseract-ocr` + `tesseract-ocr-por`.
+   - Dependências: `bash <dir-da-skill>/scripts/instalar_dependencias.sh` (Tesseract com
+     português + pacotes Python).
 1. Liste todos os documentos recebidos com: nome, tipo (edital, TR, ETP, anexo nº X,
    minuta de contrato, errata, adendo, resposta a esclarecimento, resposta a impugnação),
    data de publicação e nº de páginas.
