@@ -11,6 +11,9 @@ tem() { command -v "$1" >/dev/null 2>&1; }
 sudo_se_preciso() { if [ "$(id -u)" -eq 0 ]; then "$@"; else sudo "$@"; fi; }
 
 echo "==> Tesseract (OCR) com idioma português"
+if tem tesseract && tesseract --list-langs 2>/dev/null | grep -qx por; then
+  echo "já instalado: $(tesseract --version 2>&1 | head -1)"
+else
 case "$(uname -s)" in
   Linux)
     if tem apt-get; then
@@ -38,6 +41,7 @@ case "$(uname -s)" in
     exit 1
     ;;
 esac
+fi
 
 echo "==> Pacotes Python"
 PY="$(command -v python3 || command -v python)"
