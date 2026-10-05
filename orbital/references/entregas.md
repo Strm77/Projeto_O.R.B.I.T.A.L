@@ -165,6 +165,8 @@ Minuta = Edital, Anexo II (p. 22–30). Página do PDF = página impressa: sim/n
 
 ⚠️ <aviso de fase, se houver: "A sessão foi em dd/mm (dia) e já passou; o prazo de
 impugnação venceu em dd/mm (calculado). Este material serve para ...">
+⚠️ <aviso de documento ausente, se houver: "O Edital e o ETP não estão entre os arquivos.
+Por isso não há como responder sobre ...">
 
 ## Identificação e regras da disputa
 
@@ -176,6 +178,8 @@ Interpretação (não consta do edital): <se houver>
 ```
 
 Regras:
+- **Seções conforme o tipo** (ver o banco de perguntas do guia). Tabelas e listas
+  numeradas dentro da resposta são bem-vindas para valores, SLA, indicadores e etapas.
 - **Resposta antes da fonte.** Cada pergunta termina com a linha `📍` com todas as
   fontes; em listas, a fonte pode ir no fim de cada linha.
 - **Legenda obrigatória** no topo, ligando cada abreviação a um arquivo (e anexo, se for

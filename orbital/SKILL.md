@@ -55,6 +55,10 @@ Siga os passos na ordem. Não pule o passo 1.
    (em documento escaneado, a data pode ser erro de OCR).
 3. Registre documentos **citados mas não fornecidos** (ex.: "Anexo VII — Modelo de
    Proposta" referido no edital mas ausente). Peça ao usuário ou marque como lacuna.
+   Se faltar um documento-base (**Edital**, **ETP**, **TR** ou a minuta), avise **no topo
+   da resposta**, antes de qualquer análise, e diga quais perguntas ficam sem resposta
+   por isso (ex.: sem Edital não há data, modo de disputa nem prazo de impugnação; sem ETP
+   pode faltar a volumetria para precificar).
 4. Se houver número de páginas ilegível/escaneado sem OCR, avise que citações de página
    podem ficar imprecisas.
 5. **Fase do certame** — compare a data da sessão com hoje e diga no topo da resposta:
@@ -71,7 +75,8 @@ Siga os passos na ordem. Não pule o passo 1.
    | Tipo | Guia |
    |------|------|
    | Renovação/aquisição de licenças e subscrições de software | `references/tipos/licenciamento-software.md` |
-   | Outros (serviços contínuos, fábrica de software, service desk, nuvem, hardware) | ainda sem guia — use só as referências gerais |
+   | Serviços de TI com equipe por demanda (projetos por OS), sustentação e/ou software como insumo | `references/tipos/servicos-ti-sob-demanda.md` |
+   | Outros (service desk puro, nuvem, hardware, outsourcing de impressão) | ainda sem guia — use só as referências gerais |
 
 ### Passo 1 — Go/No-Go (eliminatório)
 Leia `references/go-no-go.md` e execute o checklist **antes de qualquer outra análise**.
@@ -95,9 +100,24 @@ Além de texto contra texto, procure inconsistências que só aparecem combinand
 - **Marco inicial:** o mesmo prazo contado de eventos diferentes (assinatura × OS × aceite).
 - **Atestado × objeto:** quantitativo mínimo exigido em atestado dividido pelo
   quantitativo do objeto; acima de 50% é candidato a impugnação (art. 67, §2º [VERIFICAR]).
-- **Cotado × exigido:** nível de serviço da planilha de preços (ex.: suporte 8x5) contra
-  o SLA exigido (ex.: P1 24x7) — custo sem item para precificar.
+- **Horário cotado × horário exigido:** suporte ou sustentação cotados em 8x5 com
+  atendimento 24x7, telefone 8x5, emergências fora do horário "sem acréscimo" —
+  custo sem item para precificar. (Apareceu nos dois casos reais.)
 - **Sanção × prazo contraditório:** multa calculada sobre um prazo que tem duas versões.
+- **Mesma falha, várias penalidades:** o mesmo fato (ex.: atraso) no IMR, na tabela de
+  sanções e na multa moratória; compare também a **base de cálculo** (OS, parcela,
+  valor anual, valor total do contrato).
+- **Aritmética dos valores:** mensal × 12 = anual? soma dos itens = total? percentuais
+  derivados (PL de 10%, garantia de 5%) — refaça e rotule "calculado".
+- **Teto × receita garantida:** item pago por demanda/alocação tem valor máximo, não
+  receita certa.
+- **Referência cruzada quebrada:** item ou anexo citado que não existe ou é o errado
+  (ex.: "subitem 4.94 do TR"; POC que manda verificar o anexo de sustentação em vez do
+  de software).
+- **Resíduos de outro edital:** nome de outro órgão (ex.: "Correios"), lei revogada
+  (8.666), ano antigo, exigência que não se aplica (garantia de proposta não exigida).
+  Achou um, procure outros: indicam trechos copiados sem revisão. (Apareceu nos dois
+  casos reais.)
 
 ### Passo 4 — Entregas iniciais
 Leia `references/entregas.md` e produza, nesta ordem:

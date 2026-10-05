@@ -14,7 +14,8 @@ orbital/
 │   ├── campos-extracao.md      # campos a extrair do edital, TR e anexos
 │   ├── entregas.md             # formato das entregas (inclui perguntas e respostas)
 │   └── tipos/
-│       └── licenciamento-software.md  # guia: renovação/aquisição de licenças
+│       ├── licenciamento-software.md  # guia: renovação/aquisição de licenças
+│       └── servicos-ti-sob-demanda.md # guia: projetos por OS, sustentação, software como insumo
 └── scripts/
     ├── extrair_pdf.py          # PDF → trechos com {arquivo, página, seção, item} + OCR
     ├── gerar_planilhas.py      # JSON da análise → .xlsx (habilitação, requisitos, prazos, Go/No-Go)

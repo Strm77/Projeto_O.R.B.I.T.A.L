@@ -6,6 +6,7 @@ avaliar a skill. Cada pasta é um caso:
 | Pasta | Tipo | PDFs no repositório? |
 |-------|------|----------------------|
 | `bcb_pe_327_2026_ibm/` | Licenças/subscrições de software (IBM) | Sim — 89 citações conferidas (`tests/test_gabaritos.py`) |
+| `midr_tr_7_2026_dados/` | Serviços de dados: projetos por OS, sustentação, software como insumo | Não — 82 citações só com a sintaxe conferida; Edital e ETP não fornecidos |
 
 Arquivos de cada caso:
 - `perguntas.md` — o gabarito (perguntas, respostas e localização);

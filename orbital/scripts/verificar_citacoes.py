@@ -83,6 +83,8 @@ def _partes(meio: str) -> dict:
             d["itens"] += _itens(m[1])
         elif m := re.match(r"al[íi]nea\s+([a-z])\b", parte, re.IGNORECASE):
             d["alinea"] = m[1].lower()
+        elif m := re.match(r"cl\.\s*(\d+)\s*[ªºa]$", parte, re.IGNORECASE):
+            d["clausula"] = m[1]  # "cl. 6ª" = cláusula sexta
         elif m := re.match(rf"cl\.\s*({NUM})", parte, re.IGNORECASE):
             d["itens"].append(m[1])  # "cl. 4.1" na minuta = item 4.1
         elif m := re.match(r"cl[áa]usula\s+(\w+)", parte, re.IGNORECASE):

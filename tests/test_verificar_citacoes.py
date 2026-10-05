@@ -136,3 +136,13 @@ def test_legenda_no_proprio_texto(docs):
     texto = f"<!-- orbital:alias TR={ED}:Anexo I; Edital={ED} -->\n📍 [TR, 6.2, p. 7] · [Edital, 7.3, p. 3]"
     resultados = vc.verificar(texto, docs)
     assert [r["nivel"] for r in resultados] == ["OK", "OK"]
+
+
+@pytest.mark.parametrize("meio, esperado", [
+    (" cl. 6ª, ", {"clausula": "6", "itens": []}),       # cláusula sexta
+    (" cl. 4.1, ", {"clausula": None, "itens": ["4.1"]}),  # item 4.1 da minuta
+    (" cronograma, ", {"clausula": None, "itens": []}),   # só página
+])
+def test_partes_clausula_ordinal(meio, esperado):
+    p = vc._partes(meio)
+    assert {k: p[k] for k in esperado} == esperado
