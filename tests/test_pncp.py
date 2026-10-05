@@ -17,11 +17,16 @@ REG = {
 OUTRO = {**REG, "numeroControlePNCP": "11111111000111-1-000001/2026", "objetoCompra": "Aquisição de cadeiras"}
 
 
+@pytest.fixture(autouse=True)
+def sem_pausa(monkeypatch):
+    monkeypatch.setattr(pncp, "PAUSA_ENTRE_PAGINAS", 0)
+
+
 @pytest.fixture
 def api(monkeypatch):
     chamadas = []
 
-    def falso(url, params=None, tentativas=3):
+    def falso(url, params=None, tentativas=6):
         chamadas.append((url, params))
         if url.endswith("/arquivos"):
             return json.dumps([{"sequencialDocumento": 1, "titulo": "Edital PE 90012", "url": url + "/1"},
@@ -70,7 +75,7 @@ def test_controle_e_data_invalidos():
 
 def test_detalhe(monkeypatch):
     urls = []
-    monkeypatch.setattr(pncp, "_get", lambda url, params=None, tentativas=3: urls.append(url) or b'{"anoCompra": 2026}')
+    monkeypatch.setattr(pncp, "_get", lambda url, params=None, tentativas=6: urls.append(url) or b'{"anoCompra": 2026}')
     assert pncp.detalhe("00394460000141-1-000123/2026") == {"anoCompra": 2026}
     assert urls == ["https://pncp.gov.br/api/consulta/v1/orgaos/00394460000141/compras/2026/123"]
 
@@ -87,7 +92,7 @@ def test_resumo_usa_campos_do_schema():
 def _api_unica(monkeypatch, pagina_unica):
     chamadas = []
 
-    def falso(url, params=None, tentativas=3):
+    def falso(url, params=None, tentativas=6):
         chamadas.append((url, params))
         return json.dumps({"data": pagina_unica, "paginasRestantes": 0}).encode()
 
@@ -132,3 +137,49 @@ def test_pca_por_ano_e_classe(monkeypatch):
     assert c[0][0].endswith("/v1/pca/") and c[0][1]["anoPca"] == 2027 and c[0][1]["codigoClassificacaoSuperior"] == "70"
     with pytest.raises(pncp.ErroPNCP):
         pncp.pca(2027, None, None, None, None, 1)
+
+
+def test_zip_dentro_de_zip_e_extraido(monkeypatch, tmp_path):
+    import io
+    import zipfile
+    interno = io.BytesIO()
+    with zipfile.ZipFile(interno, "w") as z:
+        z.writestr("EDITAL.pdf", b"%PDF-1.7 edital")
+        z.writestr("../fora.pdf", b"%PDF malicioso")
+    externo = io.BytesIO()
+    with zipfile.ZipFile(externo, "w") as z:
+        z.writestr("EDITAL - TI.zip", interno.getvalue())
+        z.writestr("RelacaoItens.pdf", b"%PDF-1.7 itens")
+
+    def falso(url, params=None, tentativas=6):
+        if url.endswith("/arquivos"):
+            return json.dumps([{"sequencialDocumento": 2, "titulo": "9254", "tipoDocumentoNome": "Edital",
+                                "url": url + "/2"}]).encode()
+        return externo.getvalue()
+
+    monkeypatch.setattr(pncp, "_get", falso)
+    salvos = pncp.baixar_arquivos("04789665000187-1-000014/2026", tmp_path)
+    nomes = sorted(p.name for p in salvos)
+    assert nomes == ["EDITAL.pdf", "RelacaoItens.pdf"]
+    assert all(tmp_path.resolve() in p.resolve().parents for p in salvos)
+    assert not (tmp_path / "fora.pdf").exists() and (tmp_path / "02_Edital_9254.zip").exists()
+
+
+def test_filtro_por_palavra_inteira():
+    regs = [{"objetoCompra": "Campo de futebol"}, {"objetoCompra": "Solução de APM e observabilidade"},
+            {"objetoCompra": "Licenças IBM Cognos"}, {"objetoCompra": "Fibra ótica"}]
+    assert [r["objetoCompra"] for r in pncp.filtrar(regs, ["apm", "ibm"])] == \
+        ["Solução de APM e observabilidade", "Licenças IBM Cognos"]
+
+
+def test_erro_no_meio_devolve_parcial(monkeypatch, capsys):
+    monkeypatch.setattr(pncp, "PAUSA_ENTRE_PAGINAS", 0)
+
+    def falso(url, params=None, tentativas=6):
+        if params["pagina"] == 2:
+            raise pncp.ErroPNCP("HTTP 429")
+        return json.dumps({"data": [REG], "paginasRestantes": 5, "totalPaginas": 6}).encode()
+
+    monkeypatch.setattr(pncp, "_get", falso)
+    assert len(pncp.abertas("2026-10-31", 6, None, 10)) == 1
+    assert "PARCIAL" in capsys.readouterr().err

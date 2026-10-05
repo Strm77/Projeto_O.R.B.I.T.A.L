@@ -31,6 +31,7 @@ import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
+import zipfile
 from datetime import date, datetime
 from pathlib import Path
 
@@ -47,6 +48,17 @@ MODALIDADES = {
     "leilao-presencial": 13,
 }
 
+# Termos de dados, IA e observabilidade (portfólio dos parceiros). Palavra inteira, sem acento.
+TERMOS_DADOS_IA = [
+    "business intelligence", "power bi", "data warehouse", "data lake", "lakehouse", "big data",
+    "ciencia de dados", "analise de dados", "analytics", "engenharia de dados", "governanca de dados",
+    "qualidade de dados", "catalogo de dados", "integracao de dados", "plataforma de dados",
+    "inteligencia artificial", "ia generativa", "machine learning", "aprendizado de maquina", "llm",
+    "chatbot", "assistente virtual", "observabilidade", "monitoramento de aplicacoes", "apm", "aiops",
+    "snowflake", "microsoft fabric", "azure", "dynatrace", "datadog", "ibm", "watsonx", "cognos", "spss",
+    "db2", "guardium", "instana", "sql server", "databricks", "qlik", "tableau", "etl",
+]
+
 RE_CONTROLE = re.compile(r"^(?P<cnpj>\d{14})-\d-(?P<seq>\d+)/(?P<ano>\d{4})$")
 
 
@@ -54,8 +66,11 @@ class ErroPNCP(Exception):
     pass
 
 
-def _get(url: str, params: dict | None = None, tentativas: int = 3) -> bytes | None:
-    """GET com nova tentativa em erro 5xx/429. Devolve None em 204 (sem conteúdo)."""
+PAUSA_ENTRE_PAGINAS = 1.0  # segundos; a API devolve 429 com ~30 requisições seguidas
+
+
+def _get(url: str, params: dict | None = None, tentativas: int = 6) -> bytes | None:
+    """GET com nova tentativa em erro 5xx/429 (respeita Retry-After). Devolve None em 204."""
     if params:
         url += "?" + urllib.parse.urlencode({k: v for k, v in params.items() if v not in (None, "")})
     for n in range(tentativas):
@@ -66,7 +81,8 @@ def _get(url: str, params: dict | None = None, tentativas: int = 3) -> bytes | N
                 return None if r.status == 204 else r.read()
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503, 504) and n < tentativas - 1:
-                time.sleep(2 ** (n + 1))
+                espera = e.headers.get("Retry-After") if e.headers else None
+                time.sleep(int(espera) if espera and espera.isdigit() else min(60, 5 * 2 ** n))
                 continue
             raise ErroPNCP(f"HTTP {e.code} em {url}") from e
         except urllib.error.URLError as e:
@@ -78,16 +94,32 @@ def _get(url: str, params: dict | None = None, tentativas: int = 3) -> bytes | N
 
 
 def _paginar(caminho: str, params: dict, max_paginas: int) -> list[dict]:
-    registros, pagina = [], 1
+    registros, pagina, total = [], 1, None
     while pagina <= max_paginas:
-        corpo = _get(f"{BASE_CONSULTA}/{caminho}", {**params, "pagina": pagina, "tamanhoPagina": TAMANHO_PAGINA})
+        if pagina > 1:
+            time.sleep(PAUSA_ENTRE_PAGINAS)
+        try:
+            corpo = _get(f"{BASE_CONSULTA}/{caminho}", {**params, "pagina": pagina, "tamanhoPagina": TAMANHO_PAGINA})
+        except ErroPNCP as e:
+            if not registros:
+                raise
+            print(f"\naviso: parou na página {pagina} de {total} ({e}); resultado PARCIAL", file=sys.stderr)
+            return registros
         if not corpo:
             break
         dados = json.loads(corpo)
         registros += dados.get("data") or []
+        total = dados.get("totalPaginas")
+        if sys.stderr.isatty():
+            print(f"\r  página {pagina}/{total or '?'}", end="", file=sys.stderr)
         if not dados.get("paginasRestantes"):
             break
         pagina += 1
+    else:
+        print(f"\naviso: leu {max_paginas} de {total} páginas; resultado INCOMPLETO "
+              f"(aumente --max-paginas ou filtre por --uf/--modalidade)", file=sys.stderr)
+    if sys.stderr.isatty():
+        print(file=sys.stderr)
     return registros
 
 
@@ -107,14 +139,14 @@ def _sem_acento(s: str) -> str:
 
 def filtrar(registros: list[dict], palavras: list[str],
             campos: tuple[str, ...] = ("objetoCompra", "informacaoComplementar")) -> list[dict]:
-    """Mantém registros em que algum dos campos contém alguma palavra (sem acento nem caixa)."""
+    """Mantém registros em que algum dos campos contém alguma palavra inteira (sem acento nem caixa)."""
     if not palavras:
         return registros
-    alvos = [_sem_acento(p) for p in palavras]
+    alvos = [re.compile(rf"\b{re.escape(_sem_acento(p))}\b") for p in palavras]
     saida = []
     for r in registros:
         texto = _sem_acento(" ".join(str(r.get(c) or "") for c in campos))
-        achadas = [p for p, a in zip(palavras, alvos) if a in texto]
+        achadas = [p for p, a in zip(palavras, alvos) if a.search(texto)]
         if achadas:
             saida.append({**r, "_palavras": achadas})
     return saida
@@ -240,8 +272,29 @@ def detalhe(controle: str) -> dict:
     return json.loads(_get(f"{BASE_CONSULTA}/orgaos/{cnpj}/compras/{ano}/{seq}") or b"{}")
 
 
+def _extrair_zip(caminho: Path, profundidade: int = 0) -> list[Path]:
+    """Extrai o .zip numa pasta ao lado (e zips dentro dele); ignora caminhos fora da pasta."""
+    pasta = caminho.with_suffix("")
+    pasta.mkdir(exist_ok=True)
+    saida = []
+    with zipfile.ZipFile(caminho) as z:
+        for info in z.infolist():
+            if info.is_dir():
+                continue
+            alvo = (pasta / info.filename).resolve()
+            if not alvo.is_relative_to(pasta.resolve()):
+                continue
+            alvo.parent.mkdir(parents=True, exist_ok=True)
+            alvo.write_bytes(z.read(info))
+            if alvo.suffix.lower() == ".zip" and profundidade < 3:
+                saida += _extrair_zip(alvo, profundidade + 1)
+            else:
+                saida.append(alvo)
+    return saida
+
+
 def baixar_arquivos(controle: str, destino: Path) -> list[Path]:
-    """Baixa os documentos de uma contratação (edital, TR, anexos, erratas)."""
+    """Baixa os documentos de uma contratação (edital, TR, anexos, erratas) e extrai os .zip."""
     cnpj, ano, seq = _partes_controle(controle)
     base = f"{BASE_PNCP}/orgaos/{cnpj}/compras/{ano}/{seq}/arquivos"
     lista = json.loads(_get(base) or b"[]")
@@ -251,7 +304,8 @@ def baixar_arquivos(controle: str, destino: Path) -> list[Path]:
         if arq.get("statusAtivo") is False:
             continue
         n = arq.get("sequencialDocumento")
-        nome = re.sub(r"[^\w.\-]+", "_", arq.get("titulo") or f"documento_{n}").strip("_")
+        rotulo = " ".join(x for x in (arq.get("tipoDocumentoNome"), arq.get("titulo")) if x) or f"documento_{n}"
+        nome = re.sub(r"[^\w.\-]+", "_", rotulo).strip("_")
         url = arq.get("url") or f"{base}/{n}"
         conteudo = _get(url) or b""
         sufixo = ".pdf" if conteudo[:4] == b"%PDF" else (".zip" if conteudo[:2] == b"PK" else "")
@@ -259,7 +313,7 @@ def baixar_arquivos(controle: str, destino: Path) -> list[Path]:
         if sufixo and not caminho.name.lower().endswith(sufixo):
             caminho = caminho.with_name(caminho.name + sufixo)
         caminho.write_bytes(conteudo)
-        salvos.append(caminho)
+        salvos += _extrair_zip(caminho) if sufixo == ".zip" else [caminho]
     (destino / "pncp_arquivos.json").write_text(json.dumps(lista, ensure_ascii=False, indent=2), encoding="utf-8")
     return salvos
 
@@ -316,7 +370,8 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--modalidade", choices=MODALIDADES, default=None if nome == "abertas" else "pregao")
         p.add_argument("--uf")
         p.add_argument("--palavra", action="append", default=[], help="filtra o objeto (repita para várias)")
-        p.add_argument("--max-paginas", type=int, default=20)
+        p.add_argument("--dados-ia", action="store_true", help="usa a lista TERMOS_DADOS_IA como palavras")
+        p.add_argument("--max-paginas", type=int, default=400)
         p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
         p.add_argument("-o", "--saida", type=Path)
     for nome in ("contratos", "atas"):
@@ -325,7 +380,7 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--ate", default=date.today().isoformat())
         p.add_argument("--cnpj", help="CNPJ do órgão")
         p.add_argument("--palavra", action="append", default=[])
-        p.add_argument("--max-paginas", type=int, default=20)
+        p.add_argument("--max-paginas", type=int, default=400)
         p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
         p.add_argument("-o", "--saida", type=Path)
     p = sub.add_parser("pca", help="itens dos Planos de Contratações Anuais")
@@ -335,7 +390,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--ate")
     p.add_argument("--cnpj")
     p.add_argument("--palavra", action="append", default=[])
-    p.add_argument("--max-paginas", type=int, default=20)
+    p.add_argument("--max-paginas", type=int, default=400)
     p.add_argument("-f", "--formato", choices=["md", "json"], default="md")
     p.add_argument("-o", "--saida", type=Path)
     p = sub.add_parser("detalhe")
@@ -379,7 +434,7 @@ def main(argv: list[str] | None = None) -> int:
             mod = MODALIDADES.get(a.modalidade) if a.modalidade else None
             regs = (abertas(a.ate, mod, a.uf, a.max_paginas) if a.cmd == "abertas"
                     else publicadas(a.de, a.ate, mod, a.uf, a.max_paginas))
-            itens = [resumir(r) for r in filtrar(regs, a.palavra)]
+            itens = [resumir(r) for r in filtrar(regs, a.palavra + (TERMOS_DADOS_IA if a.dados_ia else []))]
             titulo = "Contratações com proposta aberta" if a.cmd == "abertas" else "Contratações publicadas"
             md = lambda: para_markdown(itens, titulo)
     except ErroPNCP as e:
