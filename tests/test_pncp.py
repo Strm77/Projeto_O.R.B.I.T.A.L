@@ -73,3 +73,12 @@ def test_detalhe(monkeypatch):
     monkeypatch.setattr(pncp, "_get", lambda url, params=None, tentativas=3: urls.append(url) or b'{"anoCompra": 2026}')
     assert pncp.detalhe("00394460000141-1-000123/2026") == {"anoCompra": 2026}
     assert urls == ["https://pncp.gov.br/api/consulta/v1/orgaos/00394460000141/compras/2026/123"]
+
+
+def test_resumo_usa_campos_do_schema():
+    # Campos de RecuperarCompraPublicacaoDTO (Swagger do PNCP, 05/10/2026)
+    r = {**REG, "modoDisputaNome": "Aberto", "amparoLegal": {"nome": "Lei 14.133/2021, Art. 28, I"},
+         "linkProcessoEletronico": "https://sei", "dataPublicacaoPncp": "2026-10-04T11:46:12"}
+    i = pncp.resumir(r)
+    assert i["modo_disputa"] == "Aberto" and i["amparo_legal"].startswith("Lei 14.133")
+    assert i["publicado_em"] == "2026-10-04T11:46:12" and i["orgao"] == "MINISTÉRIO X"

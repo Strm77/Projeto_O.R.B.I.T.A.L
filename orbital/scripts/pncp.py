@@ -12,7 +12,8 @@ objeto e baixa os arquivos (edital, TR, anexos) de uma contratação para o extr
 Documentação oficial: https://pncp.gov.br/api/consulta/swagger-ui/index.html
 Caminhos conferidos no Swagger (05/10/2026): /v1/contratacoes/proposta, /v1/contratacoes/publicacao
 e /v1/orgaos/{cnpj}/compras/{ano}/{sequencial}. A lista de arquivos vem da API de integração
-(/api/pncp/v1/.../arquivos). Nomes de parâmetros e campos seguem o Manual de Integração;
+(/api/pncp/v1/.../arquivos). Campos de resposta conferidos nos schemas RecuperarCompraPublicacaoDTO e
+RecuperarCompraDTO (05/10/2026). Nomes de parâmetros seguem o Manual de Integração;
 confira em /pncp-consulta/v3/api-docs se algum mudar (BASE_*, MODALIDADES).
 """
 
@@ -124,6 +125,9 @@ def resumir(r: dict) -> dict:
         "uf": unidade.get("ufSigla"),
         "municipio": unidade.get("municipioNome"),
         "modalidade": r.get("modalidadeNome"),
+        "modo_disputa": r.get("modoDisputaNome"),
+        "amparo_legal": (r.get("amparoLegal") or {}).get("nome"),
+        "esfera": orgao.get("esferaId"),
         "numero": r.get("numeroCompra"),
         "objeto": " ".join((r.get("objetoCompra") or "").split()),
         "valor_estimado": r.get("valorTotalEstimado"),
@@ -132,6 +136,8 @@ def resumir(r: dict) -> dict:
         "situacao": r.get("situacaoCompraNome"),
         "srp": r.get("srp"),
         "link_sistema_origem": r.get("linkSistemaOrigem"),
+        "link_processo": r.get("linkProcessoEletronico"),
+        "publicado_em": r.get("dataPublicacaoPncp"),
         "link_pncp": f"https://pncp.gov.br/app/editais/{cnpj}/{ano}/{seq}" if cnpj and ano and seq else None,
         "palavras": r.get("_palavras", []),
     }
