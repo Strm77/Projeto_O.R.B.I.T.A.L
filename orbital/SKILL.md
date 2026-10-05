@@ -28,6 +28,19 @@ participar** (licitante), e não do órgão.
 
 Siga os passos na ordem. Não pule o passo 1.
 
+### Busca de oportunidades (quando o usuário pede editais, não análise)
+Use `scripts/pncp.py`. Para palavras de busca, use os termos do glossário da base de
+parceiros (`perfil/parceiros/00_INDICE*`) e da oferta da empresa:
+
+```bash
+python <dir-da-skill>/scripts/pncp.py abertas --ate <dd/mm/aaaa> --modalidade pregao --palavra dados --palavra observabilidade -o oportunidades.md
+python <dir-da-skill>/scripts/pncp.py arquivos <numeroControlePNCP> -o editais/<caso>/
+```
+
+A lista vem dos dados que o órgão cadastrou no PNCP. Cite-a como "PNCP, consultado em
+dd/mm/aaaa", não como texto do edital. A análise começa no Passo 0, com os arquivos baixados.
+Sem acesso à rede, diga que o domínio `pncp.gov.br` precisa estar liberado.
+
 ### Passo 0 — Inventário de documentos
 0. Se os documentos forem PDF, extraia o texto com o script da skill antes de ler:
 
@@ -305,4 +318,5 @@ Quando edital, TR, anexos ou minuta divergirem:
 | `extrair_pdf.py` | Passo 0: PDF → trechos com citação pronta (OCR automático) |
 | `gerar_planilhas.py` | Passo 4: planilha de habilitação, requisitos, prazos e Go/No-Go |
 | `verificar_citacoes.py` | Passo 4b: confere citações e transcrições contra as páginas reais |
+| `pncp.py` | Buscar editais no PNCP (proposta aberta ou publicados no período, filtro por palavra do objeto) e baixar os arquivos de uma contratação para o Passo 0 |
 | `instalar_dependencias.sh` | Uma vez por máquina: Tesseract com português + pacotes Python |

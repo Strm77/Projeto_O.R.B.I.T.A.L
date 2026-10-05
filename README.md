@@ -66,6 +66,25 @@ A planilha tem cabeçalho fixo, filtros, listas de validação e cores: status
 "dias restantes" é fórmula e se atualiza ao abrir. O verificador sai com código 1
 se alguma citação não bater com o PDF (item, página ou trecho transcrito).
 
+## Busca no PNCP
+
+API pública de consulta do PNCP (sem chave; só biblioteca padrão do Python):
+
+```bash
+# pregões com proposta aberta até 31/10, filtrando o objeto
+python orbital/scripts/pncp.py abertas --ate 31/10/2026 --modalidade pregao \
+    --palavra dados --palavra "business intelligence" --palavra observabilidade -o oportunidades.md
+# publicados no período (a API exige a modalidade; padrão: pregão)
+python orbital/scripts/pncp.py publicadas --de 01/10/2026 --ate 05/10/2026 --uf DF
+# baixar edital, TR e anexos de uma contratação
+python orbital/scripts/pncp.py arquivos 00394460000141-1-000123/2026 -o editais/caso/
+```
+
+Os caminhos seguem o Manual de Integração do PNCP
+(https://pncp.gov.br/api/consulta/swagger-ui/index.html). Ainda **não foram testados contra
+a API real**: os testes usam respostas simuladas. Na primeira execução real, confira se os
+campos batem.
+
 ## Testes
 
 ```bash
