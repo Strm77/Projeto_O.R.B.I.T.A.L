@@ -42,16 +42,24 @@ Siga os passos na ordem. Não pule o passo 1.
    - Páginas sem camada de texto passam por OCR (`por`). Trechos de OCR trazem
      `confianca_ocr`; números, datas e percentuais vindos de OCR devem ser marcados
      "(OCR — conferir no original)".
-   - TR em **modelo AGU/CGU preenchido** (campos de percentual, prazo, alínea): no texto
-     extraído esses valores saem fora de lugar ("de % ( por cento) 0,2 dois décimos…").
-     Antes de citar número de item de modelo, confira na página (Read do PDF).
+   - **Texto embaralhado** — TR em modelo AGU/CGU preenchido (percentuais, prazos e alíneas
+     saem fora de lugar: "de % ( por cento) 0,2 dois décimos…"), tabela que quebra de
+     página, linha de tabela sem rótulo: **renderize a página** (Read do PDF) e confira
+     antes de citar. Nesses trechos não transcreva entre aspas o texto extraído; descreva
+     o que viu na página e cite item e página.
+   - Transcrição entre aspas: copie da página, não do `extracao.md` — o extrator junta
+     palavras hifenizadas na quebra de linha. O verificador tolera hífen, mas confira.
+   - Se o script avisar **páginas faltando** (numeração impressa maior que o PDF), registre
+     como lacuna no inventário.
    - Se o script avisar que o OCR não rodou, informe ao usuário quais páginas ficaram
      sem conteúdo — nunca trate essas páginas como "não encontrado".
    - Dependências: `bash <dir-da-skill>/scripts/instalar_dependencias.sh` (Tesseract com
      português + pacotes Python).
 1. Liste todos os documentos recebidos com: nome, tipo (edital, TR, ETP, anexo nº X,
    minuta de contrato, errata, adendo, resposta a esclarecimento, resposta a impugnação),
-   data de publicação e nº de páginas.
+   data de publicação e nº de páginas. Se os anexos tiverem **dois nomes** (letra no
+   arquivo e romano na lista do TR, ex.: "Anexo IX – ANEXO I"), monte a tabela de
+   correspondência no inventário e use um só nome nas citações.
 2. Ordene por data. Documentos posteriores **alteram** os anteriores (ver Regra 3).
    Confira as datas: documento datado **depois de hoje**, errata anterior ao edital ou
    errata sem data são anomalias — sinalize no inventário e peça conferência no original
@@ -71,7 +79,10 @@ Siga os passos na ordem. Não pule o passo 1.
      proposta ajustada, documentos, assinatura, riscos de execução e o que levar à
      reunião inicial;
    - *execução* (contrato assinado): foque em prazos de entrega, recebimento,
-     pagamento, indicadores e sanções.
+     pagamento, indicadores e sanções;
+   - *indeterminada* (sem Edital ou sem data da sessão): diga isso no topo, trate como
+     pré-sessão e peça a data (PNCP/Compras.gov.br). O calendário fica com prazos
+     relativos ("sessão − 3 dias úteis") até a data chegar.
 6. **Tipo de contratação** — classifique o objeto e, se houver guia em
    `references/tipos/`, leia-o antes do Passo 1 e use o banco de perguntas dele:
 
@@ -105,7 +116,7 @@ Além de texto contra texto, procure inconsistências que só aparecem combinand
   quantitativo do objeto; acima de 50% é candidato a impugnação (art. 67, §2º [VERIFICAR]).
 - **Horário cotado × horário exigido:** suporte ou sustentação cotados em 8x5 com
   atendimento 24x7, telefone 8x5, emergências fora do horário "sem acréscimo" —
-  custo sem item para precificar. (Apareceu nos dois casos reais.)
+  custo sem item para precificar.
 - **Sanção × prazo contraditório:** multa calculada sobre um prazo que tem duas versões.
 - **Mesma falha, várias penalidades:** o mesmo fato (ex.: atraso) no IMR, na tabela de
   sanções e na multa moratória; compare também a **base de cálculo** (OS, parcela,
@@ -115,26 +126,31 @@ Além de texto contra texto, procure inconsistências que só aparecem combinand
 - **Teto × receita garantida:** item pago por demanda/alocação tem valor máximo, não
   receita certa.
 - **Referência cruzada quebrada:** item ou anexo citado que não existe ou é o errado
-  (ex.: "subitem 4.94 do TR"; POC que manda verificar o anexo de sustentação em vez do
-  de software).
-- **Resíduos de outro edital:** nome de outro órgão (ex.: "Correios"), lei revogada
-  (8.666), ano antigo, exigência que não se aplica (garantia de proposta não exigida).
-  Achou um, procure outros: indicam trechos copiados sem revisão. (Apareceu nos dois
-  casos reais.)
+  (ex.: modelo de proposta que remete a um subitem inexistente; prova de conceito que
+  manda verificar o anexo de outro serviço).
+- **Resíduos de outro edital:** nome de outro órgão, lei revogada (8.666), ano antigo,
+  datas "XX/XX", normas de outro setor, menção a ata de registro de preços quando não é
+  SRP, exigência que não se aplica (garantia de proposta não exigida). Achou um, procure
+  outros: indicam trechos copiados sem revisão.
 
 ### Passo 4 — Entregas iniciais
-Leia `references/entregas.md` e produza, nesta ordem:
-1. Go/No-Go
-2. Ficha-Resumo
-3. Roteiro de Leitura (ordenado por risco)
-4. Calendário de Prazos
+Leia `references/entregas.md`. O que entregar depende da fase e do pedido:
 
-Acrescente ao final a tabela de **Contradições e Pedidos de Esclarecimento sugeridos**
-(se houver) e a lista de **Lacunas** (documentos ou informações não encontrados).
+| Situação | Entregas, nesta ordem |
+|----------|-----------------------|
+| Pré-sessão (ou fase indeterminada), pedido genérico | Go/No-Go · Ficha-Resumo · Roteiro de Leitura · Calendário de Prazos |
+| Usuário pede **perguntas e respostas**, ou existe guia do tipo | Go/No-Go (curto) · **Perguntas e Respostas** (Entrega 5, substitui a Ficha) · Roteiro de Leitura · Calendário |
+| Pós-sessão | Go/No-Go como **histórico** (curto) · Perguntas e Respostas ou Ficha · Calendário pós-sessão · pauta da reunião inicial (o Roteiro é opcional) |
+| Execução | Calendário de execução · obrigações e indicadores · pauta de reunião |
 
-Salve as entregas em um arquivo Markdown (ex.: `analise.md`) e gere a planilha de
-trabalho a partir de um JSON com as listas de habilitação, requisitos, prazos e
-Go/No-Go (formato: `python <dir-da-skill>/scripts/gerar_planilhas.py --exemplo`):
+Sempre acrescente ao final **Contradições e Pedidos de Esclarecimento sugeridos** (se
+houver) e **Lacunas**.
+
+Salve as entregas em um arquivo Markdown (ex.: `analise.md`). A **planilha** é gerada
+quando o usuário pedir ou na análise pré-sessão para participar (é a ferramenta de
+trabalho da proposta); fora disso, ofereça em uma linha. Ela sai de um JSON com as
+listas de habilitação, requisitos, prazos e Go/No-Go (formato:
+`python <dir-da-skill>/scripts/gerar_planilhas.py --exemplo`):
 
 ```bash
 python <dir-da-skill>/scripts/gerar_planilhas.py analise.json -o planilhas.xlsx
@@ -233,6 +249,10 @@ Quando edital, TR, anexos ou minuta divergirem:
 - Redija a pergunta de forma neutra, objetiva, citando os dois trechos.
 - Informe o prazo-limite para envio: até 3 dias úteis antes da data de abertura do
   certame (art. 164, caput, Lei 14.133/2021), conforme datas do Calendário de Prazos.
+- **Prazo vencido** (pós-sessão): não sugira pedido de esclarecimento formal. Reoriente
+  cada contradição para o canal da fase: chat com o pregoeiro (se o julgamento ainda
+  estiver aberto), ofício/e-mail ao gestor antes da assinatura, ou pauta da reunião
+  inicial. Diga qual canal em cada linha.
 - Se a contradição favorecer uma leitura restritiva à competição, sugira também
   avaliar **impugnação** (mesmo prazo, art. 164).
 - Não decida qual fonte prevalece como fato. Se o próprio edital tiver cláusula de
@@ -253,6 +273,9 @@ Quando edital, TR, anexos ou minuta divergirem:
   **cálculo**, não texto do edital: rotule como "calculado" e mostre a conta.
 - Considere feriados nacionais; feriados locais do órgão são `[VERIFICAR]`.
 - Compare cada prazo com a data de hoje e indique se já venceu.
+- Prazo em dias corridos que termina em sábado, domingo ou feriado: siga a regra do
+  próprio edital (procure "prorroga-se para o primeiro dia útil"). Se o edital for
+  silente, mostre as duas datas e marque [VERIFICAR] (art. 183 da Lei 14.133).
 
 ### Regra 7 — Tom e formato
 - Português, direto, em tópicos e tabelas. Primeiro a resposta, depois o detalhe.

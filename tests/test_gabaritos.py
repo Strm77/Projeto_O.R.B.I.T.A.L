@@ -91,3 +91,17 @@ def test_midr_citacoes_do_gabarito():
     # Único erro conhecido: "No ETP" entre aspas é paráfrase de "estabelecida no Estudo
     # Técnico Preliminar" (Anexo D, p. 1) — ver notas_revisao.md.
     assert erros == ["[An. D, p. 1]"]
+
+
+# --- Teste cego: análise feita pela skill sem ver o gabarito ------------------------
+
+@pytest.mark.parametrize("pasta, pdfs, total", [
+    pytest.param(BCB, PDFS, 355, id="bcb"),
+    pytest.param(MIDR, MIDR_PDFS, 392, id="midr", marks=sem_midr),
+])
+def test_teste_cego_citacoes(pasta, pdfs, total):
+    docs = vc.carregar(pdfs)
+    texto = (pasta / "teste_cego_resultado.md").read_text(encoding="utf-8")
+    resultados = vc.verificar(texto, docs, vc.ler_apelidos([]))
+    assert len(resultados) == total
+    assert [(r["citacao"], r["msg"]) for r in resultados if r["nivel"] != "OK"] == []

@@ -146,3 +146,12 @@ def test_legenda_no_proprio_texto(docs):
 def test_partes_clausula_ordinal(meio, esperado):
     p = vc._partes(meio)
     assert {k: p[k] for k in esperado} == esperado
+
+
+def test_hifenizacao_nao_quebra_transcricao():
+    assert vc._contem("valor homem-\nhora", "valor homemhora", False) == "exato"
+
+
+def test_anexo_com_letra():
+    assert vc._anexo("ANEXO C – SUSTENTAÇÃO") == "C"
+    assert vc._anexo("Anexo II") == "II"

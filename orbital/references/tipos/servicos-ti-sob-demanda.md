@@ -7,10 +7,7 @@ obra**, combinando duas ou três frentes num grupo único:
 - **software como insumo** — ferramentas fornecidas pela contratada, sem licença em nome
   do órgão.
 
-> Base: 1 caso real conferido contra os 12 PDFs (MIDR, TR 7/2026, serviços de
-> administração e inteligência de dados, 12 meses — gabarito, PDFs e revisão em
-> `tests/gabaritos/midr_tr_7_2026_dados/`; Edital e ETP não fornecidos). Confirme cada
-> padrão no edital novo.
+> Base: casos reais conferidos contra os PDFs. Confirme cada padrão no edital novo.
 
 ## 1. Como reconhecer
 
@@ -28,10 +25,10 @@ Três ou mais destes sinais:
 
 ## 2. Onde as coisas costumam estar
 
-O pacote costuma vir **fatiado em muitos arquivos** (TR + Anexos A a K no caso MIDR).
+O pacote costuma vir **fatiado em muitos arquivos** (TR + uma dezena de anexos).
 Mapeie cada anexo no inventário antes de responder:
 
-| Anexo (caso MIDR) | Conteúdo típico |
+| Anexo (exemplo de organização) | Conteúdo típico |
 |-------------------|-----------------|
 | TR | Itens e valores, grupo único, vigência, modelo de execução, compartilhamento de profissionais, vistoria, garantias, IMR (seção 8), sanções (9), critérios de seleção e habilitação (10), POC, estimativa (11), cronograma |
 | A | Processo de desenvolvimento (ágil, normas, Design System, acessibilidade) |
@@ -126,15 +123,15 @@ Feche com **Contradições** e **Lacunas** (documentos citados e não fornecidos
 |-----------|--------------|-----------------|
 | **Teto, não receita** | Item de projetos com "valor mensal" mas pago só pela alocação prevista nas OS | Sem OS, não há receita; não dimensione a empresa pelo teto 🔴 |
 | **Plantão não remunerado** | Sustentação 8x5 com preço fixo, mas emergências fora do horário "sem acréscimo" e severidade máxima com início em 2 h | Custo de sobreaviso fora do preço 🟡 |
-| **Volumetria fora do pacote** | Números do ambiente só como "fundamentação"; a oficial remetida a lugares diferentes — no caso MIDR, três: "neste instrumento" (TR, que não traz número nenhum), "no ETP" e "no Edital" | Sem ela não dá para precificar o software. Procure **todas** as remissões (busque "volumetria") 🔴 |
+| **Volumetria fora do pacote** | Números do ambiente só como "fundamentação"; a oficial remetida a lugares diferentes (TR, ETP, Edital), às vezes a um documento que não traz número nenhum | Sem ela não dá para precificar o software. Procure **todas** as remissões (busque "volumetria") 🔴 |
 | **POC verifica qual anexo?** | TR manda verificar a tabela de um anexo e, adiante, os requisitos de outro | Matriz errada = reprovação 🔴 |
 | **Atestado de gestão de equipe** | N perfis mantidos simultaneamente por M meses, com contrato, OS, vínculos e planilha | Exigência documental pesada; checar cedo 🔴 |
 | **Atestado em horas × estimativa** | Atestado de X horas/ano contra a estimativa anual do catálogo | Se passar de 50% do objeto comparável, avaliar impugnação (art. 67, §2º [VERIFICAR]); defina a base (só projetos? projetos + sustentação?). Veja se o TR admite **converter** outras unidades (UST, PF) |
 | **Teto do IMR alto** | Descontos somados até 50% da fatura | Risco de margem; simule o pior mês |
 | **Software sem licença para o órgão** | Insumo da contratada; dados exportados e eliminados no fim | Custo de saída e de comprovação de eliminação |
-| **Legado antigo** | Bancos fora de suporte (ex.: SQL Server 2000, Oracle 11gR2) | Conectores da solução podem não suportar |
+| **Legado antigo** | Bancos fora de suporte (versões de SGBD muito antigas) | Conectores da solução podem não suportar |
 | **Execução em produção pelo órgão** | Scripts só rodam pela equipe do órgão em janelas fixas | Prazos de SLA dependem de terceiro |
 | **Infraestrutura por conta da contratada** | Estação, VPN, firewall com IPS, endpoint | Custo fixo a incluir na planilha |
-| **Centavos acima do teto** | Na própria tabela do TR, quantidade × valor unitário ≠ valor anual (MIDR: −R$ 0,02 e −R$ 0,05) | Cotar no teto mensal pode estourar o teto anual por centavos |
+| **Centavos acima do teto** | Na própria tabela do TR, quantidade × valor unitário ≠ valor anual (diferença de centavos) | Cotar no teto mensal pode estourar o teto anual por centavos |
 | **Média de média** | Tabela do catálogo com média por profissional calculada como média das médias dos perfis, ignorando perfis com 2+ pessoas | Dimensionamento levemente errado; refaça total ÷ pessoas ÷ meses |
 | **Anexos em texto corrido** | Anexos sem itens numerados nem número de página impresso | Cite pela página do PDF (`[An. C, p. 5]`) |

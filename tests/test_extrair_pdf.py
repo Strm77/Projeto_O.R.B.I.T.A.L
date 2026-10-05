@@ -214,3 +214,21 @@ def test_caractere_invisivel_e_subtitulo():
 def test_anexo_com_letra():
     m = ex._marcador("ANEXO C")
     assert m and m["tipo"] == "anexo" and m["n"] == "C"
+
+
+def test_sumario_nao_abre_clausula():
+    assert ex._marcador("CLÁUSULA NONA – DAS SANÇÕES ........................ 22") is None
+    assert ex._marcador("8.1 Da habilitação técnica ______ 14") is None
+
+
+def test_clausula_numerada_da_minuta():
+    m = ex._marcador("1. CLÁUSULA PRIMEIRA – DO OBJETO")
+    assert m and m["tipo"] == "clausula" and m["n"] == "1"
+
+
+def test_total_impresso_detecta_paginas_faltando(tmp_path):
+    import pymupdf as fitz
+    pdf = fitz.open()
+    for n in (1, 2):
+        pdf.new_page().insert_text((72, 800), f"Página {n} / 5")
+    assert ex._total_impresso(pdf) == 5

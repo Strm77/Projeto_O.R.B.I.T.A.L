@@ -53,7 +53,7 @@ def _norm(s: str) -> str:
 
 
 def _anexo(secao: str | None) -> str | None:
-    m = re.match(r"anexo\s+([ivxl]+|\d+)", secao or "", re.IGNORECASE)
+    m = re.match(r"anexo\s+([ivxl]+|\d+|[a-z])\b", secao or "", re.IGNORECASE)
     return m.group(1).upper() if m else None
 
 
@@ -117,6 +117,10 @@ def _contem(texto_paginas: str, citado: str, ocr: bool) -> str | None:
     """'exato', 'aprox' (só OCR, ≥ 85% parecido) ou None."""
     alvo, base = _norm(citado), _norm(texto_paginas)
     if alvo in base:
+        return "exato"
+    # Hifenização: "pró-\nrata" no PDF × "prórata"/"pró-rata" na transcrição; "homem-hora" × "homemhora".
+    sem_hifen = lambda x: re.sub(r"[-\u00ad]\s*", "", x)
+    if sem_hifen(alvo) in sem_hifen(base):
         return "exato"
     if ocr and len(alvo) <= len(base):
         # Tolera erro de OCR nas letras, nunca nos números: datas, valores e

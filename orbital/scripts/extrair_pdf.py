@@ -103,10 +103,17 @@ def _eh_item(num: str, sep: str, resto: str) -> bool:
     return len(primeira) >= 2 and primeira.isupper()
 
 
+RE_SUMARIO = re.compile(r"(?:\.{4,}|…{2,}|_{4,})\s*\d{1,3}\s*$")  # "CLÁUSULA PRIMEIRA ........ 22"
+
+
 def _marcador(linha: str) -> dict | None:
     """Identifica se a linha abre item, alínea, inciso, cláusula ou anexo."""
+    if RE_SUMARIO.search(linha):
+        return None  # linha de sumário: não abre item nem cláusula
     if m := RE_ANEXO.match(linha):
         return {"tipo": "anexo", "n": m["n"], "resto": m["resto"].strip()}
+    if m := re.match(r"^\d{1,2}\.\s*(CL[ÁA]USULA\s.*)$", linha, re.IGNORECASE):
+        linha = m[1]  # "1. CLÁUSULA PRIMEIRA – OBJETO" (minuta numerada)
     if m := RE_CLAUSULA.match(linha):
         return {"tipo": "clausula", "n": _numero_clausula(m["n"]), "resto": m["resto"].strip()}
     if (m := RE_ITEM.match(linha)) and _eh_item(m["num"], m["sep"].strip(), m["resto"]):
@@ -260,6 +267,18 @@ def _normaliza_margem(bloco: Bloco) -> str:
 
 def _eh_margem(bloco: Bloco) -> bool:
     return bloco.y1 <= FAIXA_MARGEM or bloco.y0 >= 1 - FAIXA_MARGEM
+
+
+def _total_impresso(pdf) -> int | None:
+    """Total de páginas que o rodapé/cabeçalho declara ("Página 3 / 25", "2 de 17")."""
+    totais: Counter[int] = Counter()
+    for pagina in pdf:
+        texto = _compactar_espacadas(pagina.get_text("text"))
+        for m in re.finditer(r"p[áa]g(?:ina)?\.?\s*\d{1,4}\s*(?:de|/|\|)\s*(\d{1,4})\b", texto, re.I):
+            totais[int(m[1])] += 1
+        for m in re.finditer(r"(?m)^\s*\d{1,4}\s*de\s*(\d{1,4})\s*$", texto):
+            totais[int(m[1])] += 1
+    return totais.most_common(1)[0][0] if totais else None
 
 
 def _separar_margens(paginas: list[list[Bloco]]) -> tuple[list[list[Bloco]], list[int | None]]:
@@ -445,6 +464,13 @@ def extrair(caminho: Path, ocr: str = "auto") -> tuple[Documento, list[Trecho]]:
         doc.avisos.append(
             f"Páginas {doc.paginas_ocr} lidas por OCR: confira citações literais "
             "(números, datas, percentuais) no original."
+        )
+
+    total = _total_impresso(pdf)
+    if total and total > pdf.page_count:
+        doc.avisos.append(
+            f"A numeração impressa indica {total} páginas, mas o PDF tem {pdf.page_count}: "
+            "documento possivelmente incompleto (páginas faltando)."
         )
 
     paginas_blocos, impressas = _separar_margens(paginas_blocos)

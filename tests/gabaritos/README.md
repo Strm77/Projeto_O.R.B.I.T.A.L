@@ -10,7 +10,10 @@ avaliar a skill. Cada pasta é um caso:
 
 Arquivos de cada caso:
 - `perguntas.md` — o gabarito (perguntas, respostas e localização);
-- `notas_revisao.md` — inconsistências encontradas no gabarito e o que virou regra na skill.
+- `notas_revisao.md` — inconsistências encontradas no gabarito e o que virou regra na skill;
+- `teste_cego_resultado.md` — análise feita pela skill sem ver o gabarito.
+
+A comparação dos testes cegos com os gabaritos está em [`teste_cego.md`](teste_cego.md).
 
 ## Quando os PDFs chegarem
 

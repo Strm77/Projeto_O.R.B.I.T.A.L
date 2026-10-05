@@ -4,9 +4,8 @@ Guia para editais cujo objeto é **renovar suporte/subscrição** e/ou **comprar
 novas** de um fabricante (IBM, Microsoft, Oracle, VMware, Red Hat etc.), com suporte
 prestado pelo próprio fabricante e revendido por um parceiro.
 
-> Base: 1 caso real analisado e conferido contra os PDFs (BCB, PE 327/2026, licenças IBM,
-> 36 meses — gabarito, PDFs e revisão em `tests/gabaritos/bcb_pe_327_2026_ibm/`). Os padrões abaixo vêm desse caso; confirme
-> em cada edital novo e, quando divergir, registre a diferença em vez de supor.
+> Base: casos reais conferidos contra os PDFs. Os padrões abaixo vêm deles; confirme em
+> cada edital novo e, quando divergir, registre a diferença em vez de supor.
 
 ## 1. Como reconhecer
 
@@ -27,7 +26,7 @@ Use este guia quando aparecerem **três ou mais** destes sinais:
 | **Edital** | Capa (sessão, UASG, ME/EPP); preâmbulo; regras de disputa (modo, intervalo de lances); valor estimado (muitas vezes sigiloso); impugnação/esclarecimento; SICAF e prazos de documentos; inexequibilidade; assinatura do contrato; cláusula de prevalência; anexos-modelo (proposta, declarações); minuta de contrato |
 | **TR** | 1 — tabela de subitens (renovação × nova), vigência; 3 — especificação: SKU, métricas, regras de cobertura e pró-rata, justificativa do item único; 4 — execução: suporte do fabricante, canais, SLA por severidade, segurança (CVE, MFA, termos), entrega e comprovação, marca, subcontratação, garantia, **declaração de registro de oportunidade**; 6 — etapas e cronograma de pagamento; 7 — gestão, preposto, reunião inicial; 8 — indicadores (IMR), recebimento, liquidação, pagamento, reajuste; 9 — sanções; 10 — habilitação; 11 — estimativa/sigilo |
 | **ETP** | Inventário atual com **vencimentos**; cenários avaliados (renovar × trocar × consultoria × sem suporte × nuvem); quantitativos (memória de cálculo às vezes sigilosa); **sinais de redução de escopo** (substituição em outro pregão, redução progressiva) |
-| **Minuta de contrato** | Costuma ser anexo do **Edital** (no caso BCB: Anexo II, p. 22–31), não do TR. Objeto com a tabela de subitens; vedação de subcontratação; garantia; supressões (até 25%, art. 125 da Lei 14.133); preposto; sanções |
+| **Minuta de contrato** | Costuma ser anexo do **Edital**, não do TR — confira em que arquivo e anexo está. Objeto com a tabela de subitens; vedação de subcontratação; garantia; supressões (até 25%, art. 125 da Lei 14.133); preposto; sanções |
 
 Os anexos-modelo citados (declaração de registro de oportunidade, ordem de
 fornecimento, termo de sigilo, termo de ciência) **costumam não vir** com o pacote
@@ -113,12 +112,12 @@ resolve ou não cada caso) e **Lacunas**.
 | **Cotação × vigência** | Cotação até data fixa (ex.: 30/09/2029) e vigência de 36 meses contados da assinatura | Datas finais diferentes; risco de cobrir menos ou mais do que o pago |
 | **Fluxo de caixa** | Pagamento único só após TRD + liquidação (≈ 6–7 semanas após a entrega) | O fornecedor paga o fabricante/distribuidor antes de receber |
 | **Registro de oportunidade** | Declaração de não ocorrência exigida com a proposta | Parceiro com deal registration na conta fica impedido ou exposto a declaração falsa 🔴 |
-| **Mesmo atraso, várias penalidades** | Glosa do indicador de atraso no IMR + o mesmo indicador na tabela de sanções + multa moratória diária (no caso BCB: TR 8.1, 9.1 e 9.4.4.1) | Custo do atraso muito maior do que parece; perguntar se cumulam 🔴 |
+| **Mesmo atraso, várias penalidades** | Glosa do indicador de atraso no IMR + o mesmo indicador na tabela de sanções + multa moratória diária  | Custo do atraso muito maior do que parece; perguntar se cumulam 🔴 |
 | **Indicador definido duas vezes** | Faixas em dias na tabela do IMR e em índice na tabela de sanções, com penalidades de ordem de grandeza diferente (ex.: 2% da OS × 10% do **contrato**) | Glosa calculável de duas formas; compare sempre a **base de cálculo** (OS, parcela ou contrato) 🔴 |
 | **Multa alta por obrigação acessória** | Tabela de sanções com multa diária sobre o **valor total do contrato** por não prestar esclarecimentos, informações ou relatórios | Penalidade desproporcional ao fato; listar na pergunta de multas 🔴 |
 | **Canais incoerentes** | Suporte 24x7 num item, telefone 8x5 noutro | Dúvida sobre o que precisa ser garantido |
 | **Minuta genérica** | "Preposto no local da obra", Lei 8.666 citada, garantia de proposta mencionada sem exigência, item inexistente referido | Modelos reaproveitados: sinalizar como 🟢, mas checar se alguma cláusula muda obrigação |
-| **Renomeação de produto** | Nome antigo e novo do mesmo produto (ex.: Spectrum Protect → Storage Protect); produto citado na métrica mas fora da tabela | Cotação do SKU errado |
+| **Renomeação de produto** | Nome antigo e novo do mesmo produto (nome antigo de linha de produto ao lado do atual); produto citado na métrica mas fora da tabela | Cotação do SKU errado |
 | **Redução de escopo** | Produto em substituição por outro pregão; "redução progressiva"; supressão de até 25% | Receita futura menor; não contar com renovações |
 | **Reajuste sem efeito** | Data-base no orçamento e pagamento único antes de completar 12 meses | Reajuste não se aplica na prática (interpretação) |
 | **Valor sigiloso** | Estimado divulgado só após julgamento | Lances sem âncora; inexequibilidade relativa ao orçado (ex.: < 50%) |
