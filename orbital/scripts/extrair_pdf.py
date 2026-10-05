@@ -43,8 +43,9 @@ VERSAO = "0.1.0"
 
 # Página com menos caracteres visíveis que isso é tratada como sem camada de texto.
 MIN_CHARS_TEXTO = 25
-# Faixa (fração da altura) onde ficam cabeçalho e rodapé.
-FAIXA_MARGEM = 0.07
+# Faixa (fração da altura) onde ficam cabeçalho e rodapé. Blocos nessa faixa só
+# são removidos se se repetem em várias páginas ou se são só a paginação.
+FAIXA_MARGEM = 0.15
 OCR_DPI = 300
 OCR_IDIOMA = "por"
 
@@ -53,6 +54,9 @@ OCR_IDIOMA = "por"
 RE_ITEM = re.compile(
     r"^(?P<num>\d{1,2}(?:\.\d{1,2}){0,5})(?P<sep>\.|\)|\s*[-–—]|)\s+(?P<resto>\S.*)$"
 )
+# Número de item sozinho na linha, com o texto na linha seguinte (comum em editais
+# diagramados em duas colunas): "1.1." / "7.10.1" / "12."
+RE_ITEM_SOZINHO = re.compile(r"^(?P<num>\d{1,2}(?:\.\d{1,2}){0,5})(?P<ponto>\.?)$")
 RE_ALINEA = re.compile(r"^(?P<al>[a-z])\)\s+(?P<resto>\S.*)$")
 RE_INCISO = re.compile(r"^(?P<inc>[IVX]{1,6})\s*[-–—]\s+(?P<resto>\S.*)$")
 RE_CLAUSULA = re.compile(
@@ -61,8 +65,14 @@ RE_CLAUSULA = re.compile(
 )
 RE_ANEXO = re.compile(r"^ANEXO\s+(?P<n>[IVXL]+|\d{1,2})\b\s*(?:[-–—:.]\s*)?(?P<resto>.*)$")
 RE_PAGINA_IMPRESSA = re.compile(
-    r"\bp[áa]g(?:ina)?\.?\s*(?P<n>\d{1,4})(?:\s*(?:de|/)\s*\d{1,4})?\b", re.IGNORECASE
+    r"\bp[áa]g(?:ina)?\.?\s*(?P<n>\d{1,4})(?:\s*(?:de|/|\|)\s*\d{1,4})?\b", re.IGNORECASE
 )
+RE_PAGINA_DE = re.compile(r"^(?P<n>\d{1,4})\s*(?:de|/)\s*\d{1,4}$")  # "2 de 17"
+
+
+def _compactar_espacadas(texto: str) -> str:
+    """'P á g i n a 4 | 35' → 'Página 4 | 35' (letras separadas por espaço)."""
+    return re.sub(r"\b(?:\w ){2,}\w\b", lambda m: m.group(0).replace(" ", ""), texto)
 
 ORDINAIS = {
     "PRIMEIRA": 1, "SEGUNDA": 2, "TERCEIRA": 3, "QUARTA": 4, "QUINTA": 5,
@@ -99,6 +109,9 @@ def _marcador(linha: str) -> dict | None:
         return {"tipo": "clausula", "n": _numero_clausula(m["n"]), "resto": m["resto"].strip()}
     if (m := RE_ITEM.match(linha)) and _eh_item(m["num"], m["sep"].strip(), m["resto"]):
         return {"tipo": "item", "n": m["num"]}
+    if (m := RE_ITEM_SOZINHO.match(linha)) and ("." in m["num"] or m["ponto"]):
+        if not any(len(p) > 1 and p.startswith("0") for p in m["num"].split(".")):
+            return {"tipo": "item", "n": m["num"]}
     if m := RE_ALINEA.match(linha):
         return {"tipo": "alinea", "n": m["al"]}
     if m := RE_INCISO.match(linha):
@@ -253,7 +266,7 @@ def _separar_margens(paginas: list[list[Bloco]]) -> tuple[list[list[Bloco]], lis
     for blocos in paginas:
         for chave in {_normaliza_margem(b) for b in blocos if _eh_margem(b)}:
             contagem[chave] += 1
-    minimo = max(2, len(paginas) // 2)
+    minimo = max(2, (len(paginas) + 1) // 2)
 
     limpas, impressas = [], []
     for blocos in paginas:
@@ -263,13 +276,14 @@ def _separar_margens(paginas: list[list[Bloco]]) -> tuple[list[list[Bloco]], lis
             if not _eh_margem(b):
                 corpo.append(b)
                 continue
-            texto = " ".join(b.linhas)
-            if m := RE_PAGINA_IMPRESSA.search(texto):
+            texto = _compactar_espacadas(" ".join(b.linhas))
+            if m := RE_PAGINA_IMPRESSA.search(texto) or RE_PAGINA_DE.match(texto.strip()):
                 numero = int(m["n"])
             elif texto.strip().isdigit() and len(texto.strip()) <= 4:
                 numero = int(texto.strip())
             repetido = contagem[_normaliza_margem(b)] >= minimo
-            so_paginacao = bool(RE_PAGINA_IMPRESSA.fullmatch(texto.strip())) or texto.strip().isdigit()
+            so_paginacao = (bool(RE_PAGINA_IMPRESSA.fullmatch(texto.strip())) or texto.strip().isdigit()
+                            or bool(RE_PAGINA_DE.match(texto.strip())))
             if not (repetido or so_paginacao):
                 corpo.append(b)
         limpas.append(corpo)
@@ -329,6 +343,23 @@ def _capitalizar(titulo: str) -> str:
     )
 
 
+def _proximo_numero(num: str) -> str:
+    partes = num.split(".")
+    return ".".join(partes[:-1] + [str(int(partes[-1]) + 1)])
+
+
+def _linha_de_tabela(num: str, seguintes: list) -> bool:
+    """True se, logo adiante (pulando restos de célula sem marcador), vem uma tabela
+    cuja 1ª célula é o número seguinte: "1.12 D27RMLL Cloud Pak" … "| 1.13 | …"."""
+    for linhas, _conf, eh_tabela in seguintes:
+        if eh_tabela:
+            celula = linhas[0].strip("| ").split("|")[0].strip()
+            return celula == _proximo_numero(num)
+        if _marcador(linhas[0]):
+            return False
+    return False
+
+
 def _citacao(t: Trecho) -> str:
     partes = [t.arquivo]
     if t.secao:
@@ -360,6 +391,8 @@ def _tipo_documento(texto_inicial: str) -> str:
         return "resposta_esclarecimento"
     if "IMPUGNACAO" in t and ("DECISAO" in t or "RESPOSTA" in t):
         return "resposta_impugnacao"
+    if "ESTUDO TECNICO PRELIMINAR" in t[:300]:  # título, não menção ao ETP
+        return "etp"
     if "EDITAL" in t[:600]:
         return "edital"
     if "TERMO DE REFERENCIA" in t:
@@ -415,6 +448,10 @@ def extrair(caminho: Path, ocr: str = "auto") -> tuple[Documento, list[Trecho]]:
         pars = list(_paragrafos(blocos))
         for idx, (par, conf, eh_tabela) in enumerate(pars):
             marc = None if eh_tabela else _marcador(par[0])
+            if marc and marc["tipo"] == "item" and _linha_de_tabela(marc["n"], pars[idx + 1:idx + 4]):
+                # Linha numerada que ficou fora da grade da tabela seguinte
+                # ("1.6 Cloud Pak ... 8 36 meses" antes de "| 1.7 | ..."): é dado, não item.
+                marc, eh_tabela = None, True
             if marc and marc["tipo"] == "anexo" and idx > 0:
                 # Anexo só muda a seção quando abre a página; na lista de anexos do
                 # edital ("ANEXO I – Termo de Referência") é apenas texto.

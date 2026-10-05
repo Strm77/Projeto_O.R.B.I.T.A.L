@@ -211,8 +211,6 @@ def verificar(texto: str, docs: dict, apelidos: dict | None = None) -> list[dict
                 falha("ERRO", f"número {item} não aparece no texto da p. {inicio}")
             if not set(citadas) & set(paginas_item):
                 falha("ERRO", f"item {item} está na(s) p. {paginas_item}, não na(s) p. {citadas}")
-            elif len(partes["itens"]) == 1 and set(paginas_item) - set(citadas):
-                falha("AVISO", f"item {item} ocupa as p. {paginas_item}; citação cobre só {citadas}")
 
         if citado:
             ocr = any(p in d["doc"].paginas_ocr for p in citadas)

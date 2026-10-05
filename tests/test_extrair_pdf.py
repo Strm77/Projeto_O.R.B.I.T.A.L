@@ -181,3 +181,25 @@ def test_cli_markdown(tmp_path, capsys):
 
 def test_cli_arquivo_inexistente(tmp_path):
     assert ex.main([str(tmp_path / "nao_existe.pdf")]) == 2
+
+
+# --- Padrões vistos em editais reais (BCB PE 327/2026) -------------------------
+
+@pytest.mark.parametrize("linha, n", [("1.1.", "1.1"), ("7.10.1", "7.10.1"), ("12.", "12")])
+def test_numero_de_item_sozinho_na_linha(linha, n):
+    m = ex._marcador(linha)
+    assert m and m["tipo"] == "item" and m["n"] == n
+
+
+@pytest.mark.parametrize("linha", ["12", "35", "2.200", "01.1"])
+def test_numero_sozinho_que_nao_e_item(linha):
+    assert ex._marcador(linha) is None
+
+
+@pytest.mark.parametrize("texto, n", [("P á g i n a 4 | 35", 4), ("Página 7 de 15", 7)])
+def test_paginacao_impressa(texto, n):
+    assert int(ex.RE_PAGINA_IMPRESSA.search(ex._compactar_espacadas(texto))["n"]) == n
+
+
+def test_paginacao_n_de_total():
+    assert int(ex.RE_PAGINA_DE.match("2 de 17")["n"]) == 2
