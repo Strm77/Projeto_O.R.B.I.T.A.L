@@ -85,11 +85,11 @@ def _get(url: str, params: dict | None = None, tentativas: int = 6) -> bytes | N
                 time.sleep(int(espera) if espera and espera.isdigit() else min(60, 5 * 2 ** n))
                 continue
             raise ErroPNCP(f"HTTP {e.code} em {url}") from e
-        except urllib.error.URLError as e:
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
             if n < tentativas - 1:
                 time.sleep(2 ** (n + 1))
                 continue
-            raise ErroPNCP(f"sem acesso a {url}: {e.reason}") from e
+            raise ErroPNCP(f"sem acesso a {url}: {getattr(e, 'reason', e)}") from e
     return None
 
 
