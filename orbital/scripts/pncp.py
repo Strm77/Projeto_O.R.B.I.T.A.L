@@ -108,6 +108,9 @@ def _paginar(caminho: str, params: dict, max_paginas: int) -> list[dict]:
                 raise
             print(f"\naviso: parou na página {pagina} de {total} ({e}); resultado PARCIAL", file=sys.stderr)
             return registros
+        except KeyboardInterrupt:
+            print(f"\naviso: interrompido na página {pagina} de {total}; resultado PARCIAL", file=sys.stderr)
+            return registros
         if not corpo:
             break
         dados = json.loads(corpo)
@@ -366,6 +369,9 @@ def para_markdown(itens: list[dict], titulo: str) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Interrupção (Ctrl+C ou SIGTERM) grava o que já foi lido em vez de perder tudo.
+    import signal
+    signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     for nome in ("abertas", "publicadas"):
